@@ -19,25 +19,32 @@ KARTA AI is a powerful, automated credit appraisal engine built for the Indian m
 
 ## 🛠️ Detailed Technology Stack
 
-### Frontend Hub (Client-Side)
-- **Vite & React.js**: Ultra-fast hot-module reloading and optimized production build setups.
-- **TypeScript**: Strict type-checking mapped perfectly to the Python backend models to prevent data parsing errors.
-- **Vanilla CSS / Lucide React Icons**: We avoided heavy styling frameworks (like Tailwind) and built custom CSS from scratch to ensure pixel-perfect, tailored aesthetic matching modern fintech applications.
-- **React Router DOM**: Client-side routing for navigating between Analysis, EWS, and History pages without reloading.
-- **Recharts**: For dynamic, SVG-based graphing of risk factors and financial data.
+### Frontend Hub
+- **React.js**: The core library for building our high-speed, intuitive user interfaces.
+- **Recharts**: For dynamic, SVG-based graphing of risk factors and financial data natively within React.
+- **TailwindCSS**: Rapid UI styling utilizing utility-first CSS for sleek, modern, and responsive fintech dashboard layouts.
 
-### Backend Engine (Server-Side)
-- **FastAPI (Python)**: The core orchestration framework. chosen for its extreme speed and native async support handling heavy I/O tasks like concurrent OCR and LLM calling.
-- **WebSockets**: Implemented custom socket handlers pointing to `/ws/ews` for live telemetry data streaming to the frontend.
-- **SQLite Database**: A lightweight, robust local database mapped with `sqlite3` to store document states, features, and analysis histories securely without external dependencies.
-- **PyMuPDF (fitz) & FPDF**: For high-speed rendering of PDFs into analyzable image bytes and generative reporting. 
-- **pdfplumber**: Used for layout-aware table extraction when reading bank statements.
+### Backend Engine
+- **FastAPI (Python)**: The core orchestration framework chosen for extreme speed and native async support handling heavy I/O tasks.
+- **Pandas**: Used critically for structuring, cleaning, and aggregating the extracted tabular data from messy Bank Statements and Balance Sheets.
+- **SQLAlchemy**: The robust Object Relational Mapper (ORM) used to bridge our Python models with database architecture seamlessly.
 
-### AI, NLP, and Machine Learning Architecture
-- **Cohere Command V2 Model**: Used for synthesizing the final Credit Appraisal Memo by analyzing a JSON dictionary of risk signals and writing a human-readable banking report.
-- **XGBoost (Decision Emulation)**: Emulated machine learning decision trees for calculating the ultimate Probability of Default (PD) and corresponding interest rate.
-- **FinBERT Pipeline**: Financial sentiment analysis against live news streams to flag macro-economic risks for a specific borrower.
-- **Tesseract OCR / Boto3 Textract**: Utilized for extracting raw text from messy, noisy, and rotated scanned financial images.
+### Databases
+- **PostgreSQL**: The primary, heavy-duty relational database for securely storing users, comprehensive analysis histories, and generated Credit Appraisals.
+- **Redis**: High-performance in-memory caching to quickly surface live Early Warning System (EWS) telemetry and manage real-time queues.
+
+### Deployment & CI/CD
+- **Vercel**: Edge-network deployment for the React Frontend ensuring ultra-low latency access globally.
+- **GitHub**: Source code collaboration, version control, and continuous integration pipelines.
+
+### AI / ML Engine
+- **Scikit-learn**: For classic feature extraction, dimensionality reduction (PCA), and preprocessing before routing to advanced gradient boosting algorithms.
+- **XGBoost**: Emulated machine learning decision trees for calculating the ultimate Probability of Default (PD) and corresponding interest rate.
+- **SHAP**: Visualizing model explainability natively via Waterfall diagrams to show precisely *why* a PD score was issued. 
+- **LangChain**: AI orchestration framework to chain together multi-step prompt workflows when reasoning about complex credit structures.
+- **FinBERT**: Financial sentiment analysis against live news streams to flag macro-economic risks for a specific borrower.
+- **Chroma**: A vector database implementation used underneath RAG (Retrieval-Augmented Generation) routines to query large textual audit reports instantly.
+- **NetworkX**: Employed for advanced graph analysis to detect circular transactions, shell company links, and hidden related-party fraud patterns.
 
 ---
 
@@ -48,31 +55,27 @@ To run this platform successfully, KARTA AI requires specific API keys to connec
 *Here is exactly what we used and why:*
 
 ```env
-# 1. COHERE API 
-# Purpose: Powers the Generative CAM engine. Synthesizes thousands of data points into a fluent banking report.
-COHERE_API_KEY="your-cohere-api-key"
+# 1. CLAUDE OPUS 4.1 API
+# Purpose: The core foundational LLM used for complex logical reasoning, extracting messy unstructured text, and synthesizing the final multi-page Credit Appraisal Memo.
+CLAUDE_API_KEY="your-claude-api-key"
 
-# 2. NEWS API
-# Purpose: Feeds live macro-economic and company-specific news into our FinBERT NLP pipeline for sentiment scoring.
-NEWS_API_KEY="your-news-api-key"
-
-# 3. MCA21 API (Ministry of Corporate Affairs)
+# 2. MCA API (Ministry of Corporate Affairs)
 # Purpose: Cross-checks director DINs, company registration status (CIN), and flags shell corporations automatically.
 MCA_API_KEY="your-mca-api-key"
 
-# 4. SENDGRID API
-# Purpose: Hooks into the Early Warning System (EWS) to dispatch instant SMS/Email alerts to bank managers when a risk threshold breaches.
-SENDGRID_API_KEY="your-sendgrid-api-key"
+# 3. BANK STATEMENT API
+# Purpose: Securely pulls digitized banking transaction data to instantly compute liquidity ratios, bouncing EMIs, and cash flow velocity.
+BANK_API_KEY="your-bank-api-key"
 
-# 5. AWS CREDENTIALS (Optional for OCR scaling)
-# Purpose: Bridges Tesseract OCR with AWS Textract for extreme low-resolution document recovery.
+# 4. AWS CREDENTIALS 
+# Purpose: Bridges Tesseract OCR with AWS Textract to retrieve clean text from extreme low-resolution, rotated, and noisy physical invoices.
 AWS_ACCESS_KEY_ID="your-aws-access-key"
 AWS_SECRET_ACCESS_KEY="your-aws-secret-key"
 AWS_REGION="ap-south-1"
 
-# 6. SYSTEM CONFIG
-ENVIRONMENT="development"
-FRONTEND_URL="http://localhost:5173"
+# 5. GSTN API
+# Purpose: Ingests digital tax filings (GSTR-2A/3B) directly from government portals to reconcile stated revenues against actual tax-paid invoices.
+GSTN_API_TOKEN="your-gstn-api-token"
 ```
 
 ---
