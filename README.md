@@ -1,75 +1,109 @@
-# KARTA — AI Credit Intelligence Platform (Backend)
+# ⚡ KARTA AI
 
-Welcome to the backend infrastructure for **KARTA**, the AI-powered credit intelligence platform crafted for Indian NBFCs. This layer provides 6 robust microservice architectures simulating advanced ML inferences, AI orchestration, and automated pipeline generation designed expressly for the Hackathon Demo.
+**India's First RBI-Compliant AI Credit Intelligence Platform**
 
-## Requirements
-- **Python 3.11+**
-- PostgreSQL (Active models are supported, although the initial configuration runs purely via local SQLite bindings dynamically via SQLAlchemy if DB variables aren't injected).
+KARTA AI is a powerful, automated credit appraisal engine built for the Indian mid-market lending sector. It ingests complex, messy financial documents, detects fraud, evaluates risk, and automatically writes the full Credit Appraisal Memo (CAM) natively. It takes subjective, unorganized MSME data and turns it into concrete, explainable lending decisions.
 
-## Installation
+---
 
-### 1. Configure the Python Environment
-We highly recommend isolating dependencies via `venv`:
+## 🚀 What We Have Done
+
+1. **Intelligent Document Parsing**: Created an engine that accepts scanned, handwritten, and mixed-language (Hindi/English) PDFs like Balance Sheets, Bank Statements, and GST Filings.
+2. **Real-time Early Warning System (EWS)**: Built a dynamic dashboard with live WebSocket telemetry that monitors active portfolios for volatility using simulated real-time drift algorithms.
+3. **Advanced Risk Assessment UI**: Designed an interface that presents XGBoost Default Risk, Fraud Multipliers, Data Quality, and News Sentiment scores.
+4. **SHAP Value Explanations**: Visualized the actual drivers behind a rejection or approval utilizing Waterfall SHAP diagrams.
+5. **Generative CAM**: Integrated LLMs to instantly generate a comprehensive, multi-page Credit Appraisal Memo synthesizing all financial records and background findings.
+6. **Robust Hackathon Demo Flow**: Designed a built-in stress-test flow that takes "messy" distressed company data and successfully proves an AI-driven "REJECT" decision based on EMI bounces and plunging revenue.
+
+---
+
+## 🛠️ Technology Stack
+
+### Frontend Hub
+- **React.js (Vite)** 
+- **TypeScript** 
+- **Vanilla CSS / Lucide React Icons**
+- **React Router DOM** & **Recharts**
+
+### Backend Engine
+- **FastAPI (Python)** - Core orchestration and routing.
+- **WebSockets** - Live data streaming for the EWS pipeline.
+- **SQLite** - Session and document-state storage.
+- **PyMuPDF (fitz) / FPDF / pdfplumber** - High-speed PDF processing and generation.
+
+### AI & Analysis Integration
+- **Cohere API** - Generative AI for drafting the Credit Appraisal Memos (CAM).
+- **Computer Vision (Boto3 / Tesseract OCR)** - For extracting tables and text from messy scanned images.
+- **NLP / FinBERT Pipeline** - Evaluating News Sentiment and textual annotations in Hindi/English.
+- **XGBoost (Decision Emulation)** - Machine learning models for calculating Probability of Default (PD).
+
+---
+
+## 🔑 Environment Variables & API Keys Required
+
+To run this platform successfully, create a `.env` file in the root directory (`/KARTA/.env`) with the following keys:
+
+```env
+# Required for Generative CAM features
+COHERE_API_KEY="your-cohere-api-key-here"
+
+# (Optional) If utilizing AWS Textract for extreme OCR
+AWS_ACCESS_KEY_ID="your-aws-access-key"
+AWS_SECRET_ACCESS_KEY="your-aws-secret-key"
+AWS_REGION="ap-south-1"
+
+# General Config 
+ENVIRONMENT="development"
+FRONTEND_URL="http://localhost:5173"
+```
+
+---
+
+## 🏁 How to Run the Project Locally
+
+You will need two terminal windows to run the frontend and backend simultaneously.
+
+### 1. Start the Backend API (Terminal 1)
 ```bash
+# Navigate to the project root
+cd /path/to/KARTA
+
+# Create and activate a virtual environment (Windows)
 python -m venv venv
+.\venv\Scripts\activate
 
-# On Mac/Linux:
-source venv/bin/activate
+# Install the required Python packages
+pip install -r requirements.txt
 
-# On Windows:
-venv\\Scripts\\activate
+# Start the FastAPI server on port 8000
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
+*The backend API will be available at: http://localhost:8000*
 
-### 2. Install Dependencies
+### 2. Start the Frontend Dashboard (Terminal 2)
 ```bash
-pip install fastapi uvicorn sqlalchemy psycopg2-binary requests
+# Navigate to the frontend source folder
+cd /path/to/KARTA/src
+
+# Install Node dependencies
+npm install
+
+# Start the Vite development server
+npm run dev
 ```
+*The web interface will be available at: http://localhost:5173*
 
 ---
 
-## Environment Variables
-Create a local `.env` and export these mappings to customize production outputs, or rely on the defaults for the demo environment:
-- `DATABASE_URL` (Defaults to local `postgresql://...` strings mapped in `config.py`)
-- `CLAUDE_API_KEY` (Auth for future LLM integration)
-- `AWS_ACCESS_KEY` & `AWS_SECRET_KEY` (S3 bindings for File Uploads)
-- `CHROMA_DB_PATH`
-- `UPLOAD_FOLDER` (Defaults to local `/uploads`)
-- `MAX_FILE_SIZE` (Defaults to `10.0` megabytes)
+## 📂 Project Structure
+
+* `/src/`: React frontend codebase (Pages, Components, Services).
+* `/routers/`: FastAPI endpoint controllers (websockets, CAM generation, analysis).
+* `/services/`: Core python background services (OCR engine, EWS logic, API wrappers).
+* `/utils/`: Helper scripts for file parsing and data formatting.
+* `main.py`: Application entry point and configuration for FastAPI.
+* `karta.db`: Local SQLite database storing analysis history.
 
 ---
 
-## Running the Server
-FastAPI maps automatically via the `uvicorn` engine. Execute the following command from the root directory to go live:
-```bash
-uvicorn main:app --reload
-```
-You can access the Swagger UI directly by navigating to `http://localhost:8000/docs`
-
----
-
-## Resetting Demo Data
-This system comes hardcoded with the complete **ABC Manufacturing Ltd** test profile. To ensure smooth, repetitive hackathon demonstrations without DB clustering, use the absolute wipe command:
-**Direct GET Request:** `http://localhost:8000/api/demo/reset`
-
----
-
-## Endpoints Guide
-
-Here map the exact controller URLs functioning locally:
-
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/health` | Standard AWS/Azure availability ping yielding basic 'ok' parameters. |
-| `POST` | `/api/upload` | Orchestrates raw financial Form-Data (.pdf PDFs) triggering DB initializations. |
-| `POST` | `/api/analyze/{id}` | The Master Controller. Invokes all 5 ML Services natively chaining OCR -> Fraud -> News RAG -> Scoring -> CAM Document Generation sequentially. |
-| `GET` | `/api/status/{id}` | Immediate tracker fetching `percentage_complete` integer polls for React dashboard UIs. |
-| `GET` | `/api/results/{id}` | Gathers deep aggregated JSON datasets mapping SHAP algorithms alongside raw Credit Underwriting metrics safely. |
-| `GET` | `/api/fraud/{id}` | Retrieves parsed Fake ITC mismatches, NetworkX circular mapping matrices, and MCA regulatory flags. |
-| `GET` | `/api/fraud/graph/{id}` | Returns interactive raw HTML scripts rendering PyVis/Vis.js interactive Network Graphs via iframes. |
-| `GET` | `/api/ews/{company_id}` | Active Early Warning System tracker detailing 15 variables merging API news signals with internal DB payment structures tracing current month predictions. |
-| `POST` | `/api/ews/acknowledge/{id}` | Converts Boolean state for direct RM interface actions resolving specific Warning triggers. |
-| `GET` | `/api/ews/all-loans` | Aggregate RM Dashboard querying database row counts fetching exact portfolio volume tracking specific unread alerts mappings safely. |
-| `POST` | `/api/cam/generate/{id}` | Simulated .docx compiler engine aggregating all variables explicitly compiling standard Credit Memos. |
-| `GET` | `/api/cam/download/{id}` | Fast streaming API serving physically hosted Document bytes manipulating content-disposition mapping. |
-| `GET` | `/api/cam/preview/{id}` | Fast pre-loader mapping raw NLP summaries mapping abstract text vectors directly. |
-| `GET` | `/api/demo/reset` | Resets the SQLite/PostgreSQL ABC datasets perfectly wiping previous session variables immediately. |
+*Built during hackathon development sprints focusing on bridging AI execution with banking and MSME compliance standards.*
