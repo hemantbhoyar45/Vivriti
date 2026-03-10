@@ -33,9 +33,6 @@ KARTA AI is a powerful, automated credit appraisal engine built for the Indian m
 - **PostgreSQL**: The primary, heavy-duty relational database for securely storing users, comprehensive analysis histories, and generated Credit Appraisals.
 - **Redis**: High-performance in-memory caching to quickly surface live Early Warning System (EWS) telemetry and manage real-time queues.
 
-### Deployment & CI/CD
-- **Vercel**: Edge-network deployment for the React Frontend ensuring ultra-low latency access globally.
-- **GitHub**: Source code collaboration, version control, and continuous integration pipelines.
 
 ### AI / ML Engine
 - **Scikit-learn**: For classic feature extraction, dimensionality reduction (PCA), and preprocessing before routing to advanced gradient boosting algorithms.
@@ -43,7 +40,7 @@ KARTA AI is a powerful, automated credit appraisal engine built for the Indian m
 - **SHAP**: Visualizing model explainability natively via Waterfall diagrams to show precisely *why* a PD score was issued. 
 - **LangChain**: AI orchestration framework to chain together multi-step prompt workflows when reasoning about complex credit structures.
 - **FinBERT**: Financial sentiment analysis against live news streams to flag macro-economic risks for a specific borrower.
-- **Chroma**: A vector database implementation used underneath RAG (Retrieval-Augmented Generation) routines to query large textual audit reports instantly.
+- **ChromaDB**: A vector database implementation used underneath RAG (Retrieval-Augmented Generation) routines to query large textual audit reports instantly.
 - **NetworkX**: Employed for advanced graph analysis to detect circular transactions, shell company links, and hidden related-party fraud patterns.
 
 ---
