@@ -45,7 +45,44 @@ KARTA AI is a powerful, automated credit appraisal engine built for the Indian m
 
 ---
 
-## 🔑 External API Integrations
+## � Project Structure
+
+The project is organized into two main directories for clean separation of concerns:
+
+```
+Karta_AI/
+├── frontend/                   # 🖥️ React + Vite web application
+│   ├── src/                    # React components and pages
+│   ├── public/                 # Static assets
+│   ├── node_modules/           # JavaScript dependencies
+│   ├── package.json            # Frontend dependencies
+│   ├── tsconfig.json           # TypeScript config
+│   ├── vite.config.ts          # Vite bundler config
+│   └── ...
+│
+├── backend/                    # ⚙️ FastAPI Python server
+│   ├── routers/                # API route definitions
+│   ├── services/               # Business logic & AI services
+│   ├── models/                 # ML models storage
+│   ├── utils/                  # Helper functions
+│   ├── data/                   # Datasets
+│   ├── chroma_db/              # Vector database
+│   ├── venv/                   # Python virtual environment
+│   ├── main.py                 # FastAPI entry point
+│   ├── config.py               # Configuration settings
+│   ├── requirements.txt        # Python dependencies
+│   └── ...
+│
+├── .env                        # 🔒 Environment variables
+├── start_backend.py            # Quick start script for backend
+├── start_frontend.ps1          # Quick start script for frontend (PowerShell)
+├── start_frontend.sh           # Quick start script for frontend (Bash)
+└── README.md                   # This file
+```
+
+---
+
+## �🔑 External API Integrations
 
 To run this platform successfully, KARTA AI requires specific API keys to connect to various data enrichment and intelligence platforms. You must create a `.env` file in the root directory (`/KARTA/.env`) and add the following keys. 
 
@@ -79,38 +116,96 @@ GSTN_API_TOKEN="your-gstn-api-token"
 
 ## 🏁 How to Run the Project Locally
 
-You will need two separate terminal windows or standard command prompts to run both platforms simultaneously.
+You will need two separate terminal windows to run both the backend and frontend simultaneously. Choose the method that works best for your system.
 
-### 1. Start the Backend API Engine (Terminal 1)
+### Quick Start (All-in-one)
+
+For **Windows (PowerShell)**, open two terminals in the Karta_AI root directory:
+
+**Terminal 1 - Backend:**
+```powershell
+python start_backend.py
+```
+
+**Terminal 2 - Frontend:**
+```powershell
+.\start_frontend.ps1
+```
+
+For **macOS/Linux**, open two terminals:
+
+**Terminal 1 - Backend:**
 ```bash
-# Navigate to the project root
-cd /path/to/KARTA
+python start_backend.py
+```
 
-# Create and activate a virtual environment (Windows)
+**Terminal 2 - Frontend:**
+```bash
+bash start_frontend.sh
+```
+
+---
+
+### Manual Setup (Detailed)
+
+#### Backend Setup (Terminal 1)
+```bash
+# Navigate to the backend directory
+cd backend
+
+# Create and activate a virtual environment
+# Windows
 python -m venv venv
 .\venv\Scripts\activate
 
-# Install the required Python packages
+# macOS/Linux
+python3 -m venv venv
+source venv/bin/activate
+
+# Install Python dependencies
 pip install -r requirements.txt
 
-# Start the FastAPI server on port 8000
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
+# Start the FastAPI server
+python run_backend.py
 ```
-*The backend API will be live and accepting uploads at: `http://localhost:8000`*
 
-### 2. Start the Frontend Web Application (Terminal 2)
+✅ **Backend will be available at:** `http://localhost:8000`
+📖 **API Documentation:** `http://localhost:8000/docs`
+
+#### Frontend Setup (Terminal 2)
 ```bash
-# Navigate to the frontend source folder
-cd /path/to/KARTA/src
+# Navigate to the frontend directory
+cd frontend
 
-# Install Node dependencies
+# Install Node.js dependencies
 npm install
 
-# Start the Vite development system
+# Start the development server
 npm run dev
 ```
-*The React UI will launch instantly and be available at: `http://localhost:5173`*
+
+✅ **Frontend will be available at:** `http://localhost:5173`
 
 ---
+
+### Production Build
+
+#### Build Frontend
+```bash
+cd frontend
+npm run build
+```
+
+#### Build Backend
+The backend is already production-ready with FastAPI. Simply ensure dependencies are installed and run with a production ASGI server:
+```bash
+cd backend
+pip install -r requirements.txt
+gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app
+```
+
+---
+
+
 
 *Built with passion, late nights, and heavy AI engineering to bridge the gap between deep-tech and realistic Indian banking operations.*
