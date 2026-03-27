@@ -1,8 +1,11 @@
 import { Shield, Zap, TrendingUp, PlayCircle, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import './Home.css';
 
 function Home() {
+  const { user, logout } = useAuth();
+
   return (
     <div className="home-page">
       <nav className="navbar">
@@ -23,9 +26,25 @@ function Home() {
           </Link>
 
           <div className="nav-right">
-            <Link to="/new-analysis" className="btn btn-primary">
-              Start Analysis
-            </Link>
+            {user ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <Link to="/new-analysis" className="btn btn-primary">
+                  Start Analysis
+                </Link>
+                <button onClick={logout} className="btn btn-outline">
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <Link to="/login" className="btn btn-outline">
+                  Login
+                </Link>
+                <Link to="/signup" className="btn btn-primary">
+                  Sign Up
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </nav>
@@ -45,9 +64,15 @@ function Home() {
           </p>
 
           <div className="hero-actions">
-            <Link to="/new-analysis" className="btn btn-primary">
-              Start Credit Analysis <ArrowRight size={18} />
-            </Link>
+            {user ? (
+              <Link to="/new-analysis" className="btn btn-primary">
+                Start Credit Analysis <ArrowRight size={18} />
+              </Link>
+            ) : (
+               <Link to="/signup" className="btn btn-primary">
+                Join KARTA AI <ArrowRight size={18} />
+              </Link>
+            )}
             <button className="btn btn-outline" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
               <PlayCircle size={18} /> See How It Works
             </button>

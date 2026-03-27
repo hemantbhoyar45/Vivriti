@@ -8,6 +8,11 @@ import WarningSystem from './pages/WarningSystem';
 import CamSuccess from './pages/CamSuccess';
 import History from './pages/History';
 
+import { AuthProvider } from './context/AuthContext';
+import { ProtectedRoute } from './components/ProtectedRoute';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+
 /* 
   All inter-page navigation uses URL query params to carry the analysis ID:
   /analysis?id=2
@@ -19,16 +24,21 @@ import History from './pages/History';
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/new-analysis" element={<NewAnalysis />} />
-        <Route path="/history" element={<History />} />
-        <Route path="/analysis" element={<Analysis />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/fraud-report" element={<FraudReport />} />
-        <Route path="/warning-system" element={<WarningSystem />} />
-        <Route path="/cam-success" element={<CamSuccess />} />
-      </Routes>
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          
+          <Route path="/new-analysis" element={<ProtectedRoute><NewAnalysis /></ProtectedRoute>} />
+          <Route path="/history" element={<ProtectedRoute><History /></ProtectedRoute>} />
+          <Route path="/analysis" element={<ProtectedRoute><Analysis /></ProtectedRoute>} />
+          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/fraud-report" element={<ProtectedRoute><FraudReport /></ProtectedRoute>} />
+          <Route path="/warning-system" element={<ProtectedRoute><WarningSystem /></ProtectedRoute>} />
+          <Route path="/cam-success" element={<ProtectedRoute><CamSuccess /></ProtectedRoute>} />
+        </Routes>
+      </AuthProvider>
     </Router>
   );
 }
