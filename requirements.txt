@@ -4,3 +4,12 @@ sqlalchemy
 psycopg2-binary
 requests
 python-multipart
+python-dotenv
+chromadb
+sentence-transformers
+scikit-learn
+redis
+tenacity
+numpy
+pydantic
+pydantic-settings
