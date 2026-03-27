@@ -40,9 +40,6 @@ function Home() {
                 <Link to="/login" className="btn btn-outline">
                   Login
                 </Link>
-                <Link to="/signup" className="btn btn-primary">
-                  Sign Up
-                </Link>
               </div>
             )}
           </div>
@@ -69,8 +66,8 @@ function Home() {
                 Start Credit Analysis <ArrowRight size={18} />
               </Link>
             ) : (
-               <Link to="/signup" className="btn btn-primary">
-                Join KARTA AI <ArrowRight size={18} />
+               <Link to="/login" className="btn btn-primary">
+                Login to KARTA AI <ArrowRight size={18} />
               </Link>
             )}
             <button className="btn btn-outline" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
@@ -78,26 +75,7 @@ function Home() {
             </button>
           </div>
 
-          <div className="hero-illustration">
-            <div className="mockup-window">
-              <div className="mockup-header">
-                <div className="mockup-line" style={{ width: '40%' }}></div>
-                <div className="mockup-circle"></div>
-              </div>
-              <div className="mockup-body">
-                <div className="mockup-line" style={{ width: '100%' }}></div>
-                <div className="mockup-line" style={{ width: '80%' }}></div>
-                <div className="mockup-input">
-                  <div className="mockup-input-inner"></div>
-                </div>
-              </div>
-              <div className="mockup-cards">
-                <div className="mockup-card"></div>
-                <div className="mockup-card"></div>
-                <div className="mockup-card"></div>
-              </div>
-            </div>
-          </div>
+
         </section>
 
         <section className="features-ribbon">

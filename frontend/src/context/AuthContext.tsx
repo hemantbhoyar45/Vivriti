@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import axios from 'axios';
+
+const ADMIN_EMAIL = 'admin@gmail.com';
+const ADMIN_PASSWORD = 'admin@12345';
 
 const AuthContext = createContext<any>(null);
 
@@ -7,43 +9,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchMe = async () => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      setLoading(false);
-      return;
-    }
-    try {
-      const res = await axios.get('http://localhost:8000/api/auth/me', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setUser(res.data);
-    } catch (err) {
-      localStorage.removeItem('token');
-      setUser(null);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchMe();
+    // Restore session from localStorage on page refresh
+    const storedUser = localStorage.getItem('admin_user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+    setLoading(false);
   }, []);
 
-  const login = async (formData: FormData) => {
-    const res = await axios.post('http://localhost:8000/api/auth/login', formData);
-    localStorage.setItem('token', res.data.access_token);
-    await fetchMe();
-    return res.data;
+  const login = async (email: string, password: string) => {
+    if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+      const adminUser = { email: ADMIN_EMAIL, role: 'admin', name: 'Administrator' };
+      localStorage.setItem('admin_user', JSON.stringify(adminUser));
+      setUser(adminUser);
+      return adminUser;
+    } else {
+      throw new Error('Invalid credentials. Access denied.');
+    }
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem('admin_user');
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, fetchMe }}>
+    <AuthContext.Provider value={{ user, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

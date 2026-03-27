@@ -14,13 +14,10 @@ const Login: React.FC = () => {
         e.preventDefault();
         setError('');
         try {
-            const formData = new FormData();
-            formData.append('username', email); // FastAPI OAuth2 expects 'username' instead of 'email'
-            formData.append('password', password);
-            await login(formData);
-            navigate('/new-analysis');
+            await login(email, password);
+            navigate('/admin-dashboard');
         } catch (err: any) {
-            setError(err.response?.data?.detail || 'Failed to login');
+            setError(err.message || 'Invalid credentials. Please try again.');
         }
     };
 
@@ -31,8 +28,8 @@ const Login: React.FC = () => {
                     <div className="logo-icon">⚡</div>
                     <h1>KARTA AI</h1>
                 </div>
-                <h2>Welcome Back</h2>
-                <p className="subtitle">Enter your credentials to access your dashboard</p>
+                <h2>Admin Login</h2>
+                <p className="subtitle">Enter predefined admin credentials to access the platform</p>
 
                 {error && <div className="error-message">{error}</div>}
 
@@ -43,7 +40,7 @@ const Login: React.FC = () => {
                             type="email" 
                             value={email} 
                             onChange={(e) => setEmail(e.target.value)} 
-                            placeholder="name@company.com"
+                            placeholder="admin@karta.ai"
                             required 
                         />
                     </div>
@@ -60,9 +57,6 @@ const Login: React.FC = () => {
                     <button type="submit" className="login-btn">Sign In</button>
                 </form>
 
-                <p className="signup-text">
-                    Don't have an account? <Link to="/signup">Create an account</Link>
-                </p>
                 
                 <div className="back-to-home">
                     <Link to="/">← Back to Home</Link>

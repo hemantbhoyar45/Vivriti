@@ -2,8 +2,7 @@
  * FILE 1 — uploadApi.ts
  * Handles company document upload with real progress tracking.
  */
-import axios from 'axios';
-import { BASE_URL } from './apiConfig';
+import api from './apiConfig';
 
 export interface UploadResult {
   success: boolean;
@@ -40,7 +39,7 @@ export async function uploadCompanyDocuments(params: UploadParams): Promise<Uplo
   form.append('bank_statement',params.bank_statement);
   form.append('gst_filing',    params.gst_filing);
 
-  const response = await axios.post<UploadResult>(`${BASE_URL}/api/upload`, form, {
+  const response = await api.post<UploadResult>(`/api/upload`, form, {
     headers: { 'Content-Type': 'multipart/form-data' },
     timeout: 300_000, // 5 minutes for large file uploads
     onUploadProgress: (evt) => {

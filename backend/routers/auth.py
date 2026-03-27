@@ -13,25 +13,23 @@ router = APIRouter(prefix="/api/auth", tags=["Authentication"])
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 
-@router.post("/register", response_model=UserResponse)
-def register(user: UserCreate, db: Session = Depends(get_db)):
-    db_user = db.query(User).filter(User.email == user.email).first()
-    if db_user:
-        raise HTTPException(status_code=400, detail="Email already registered")
-    
-    hashed_password = get_password_hash(user.password)
-    new_user = User(
-        email=user.email,
-        hashed_password=hashed_password,
-        full_name=user.full_name
-    )
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-    return new_user
+
+# Registration is disabled for the admin-only prototype
+# @router.post("/register", response_model=UserResponse)
+# def register(user: UserCreate, db: Session = Depends(get_db)):
+#     ...
 
 @router.post("/login", response_model=Token)
 def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    # Predefined admin credentials for the prototype
+    ADMIN_EMAIL = "admin@karta.ai"
+    ADMIN_PASSWORD = "admin" # Simple password for prototype
+    
+    if form_data.username == ADMIN_EMAIL and form_data.password == ADMIN_PASSWORD:
+        access_token = create_access_token(data={"sub": ADMIN_EMAIL})
+        return {"access_token": access_token, "token_type": "bearer"}
+        
+    # Standard DB check as fallback or if user management is implemented later
     user = db.query(User).filter(User.email == form_data.username).first()
     if not user or not verify_password(form_data.password, user.hashed_password):
         raise HTTPException(
@@ -52,6 +50,14 @@ def get_me(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
             raise HTTPException(status_code=401, detail="Invalid token")
     except jwt.PyJWTError:
         raise HTTPException(status_code=401, detail="Invalid token")
+    
+
+    if email == "admin@karta.ai":
+        return {
+            "email": "admin@karta.ai",
+            "full_name": "System Administrator",
+            "id": 0
+        }
     
     user = db.query(User).filter(User.email == email).first()
     if user is None:

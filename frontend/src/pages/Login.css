@@ -104,21 +104,7 @@
     background-color: #1d4ed8;
 }
 
-.signup-text {
-    text-align: center;
-    color: #94a3b8;
-    margin-top: 1rem;
-}
 
-.signup-text a {
-    color: #3b82f6;
-    text-decoration: none;
-    font-weight: 500;
-}
-
-.signup-text a:hover {
-    text-decoration: underline;
-}
 
 .error-message {
     background-color: rgba(239, 68, 68, 0.1);

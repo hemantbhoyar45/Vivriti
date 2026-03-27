@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Clock, Zap, FileText, Activity, ShieldAlert, ArrowRight, Home } from 'lucide-react';
+import { Clock, Zap, FileText, Activity, ShieldAlert, ArrowRight } from 'lucide-react';
 import './History.css';
 import api from '../services/apiConfig';
 
-function History() {
+function History({ hideNavbar = false }: { hideNavbar?: boolean }) {
     const [history, setHistory] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -37,18 +37,20 @@ function History() {
 
     return (
         <div className="history-page">
-            <nav className="history-navbar">
-                <Link to="/" className="logo-container">
-                    <Zap size={24} fill="#1C335B" stroke="none" />
-                    <span>KARTA AI</span>
-                </Link>
-                <div className="nav-center-title">
-                    <Clock size={16} /> Analysis Portfolio History
-                </div>
-                <Link to="/new-analysis" className="btn btn-primary btn-sm">
-                    Run New Analysis
-                </Link>
-            </nav>
+            {!hideNavbar && (
+                <nav className="history-navbar">
+                    <Link to="/" className="logo-container">
+                        <Zap size={24} fill="#1C335B" stroke="none" />
+                        <span>KARTA AI</span>
+                    </Link>
+                    <div className="nav-center-title">
+                        <Clock size={16} /> Analysis Portfolio History
+                    </div>
+                    <Link to="/new-analysis" className="btn btn-primary btn-sm">
+                        Run New Analysis
+                    </Link>
+                </nav>
+            )}
 
             <div className="history-container">
                 <div className="history-header">

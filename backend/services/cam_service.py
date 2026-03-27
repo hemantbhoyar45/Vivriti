@@ -111,9 +111,7 @@ def generate_cam(analysis_data: dict, field_observations: str = "") -> dict:
     rag_payload = construct_rag_context(analysis_data)
     
     # 2. Cohere Execution
-    api_key = os.getenv("COHERE_API_KEY")
-    if not api_key:
-        raise ValueError("COHERE_API_KEY environment variable is missing. Cannot natively synthesize the CAM.")
+    api_key = os.getenv("COHERE_API_KEY") or "wfBOigtt2Zu4gcl7kmuaFfuc7BjFk4IPWAJBkuoz"
         
     # ── Build dynamic conditions from REAL analysis values ──
     fraud = analysis_data.get("fraud", {})

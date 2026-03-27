@@ -14,7 +14,8 @@ export const WS_URL = `${wsProtocol}//${window.location.host}`;
 
 // ─── Global Axios Instance ────────────────────────────────────────────────────
 const api = axios.create({
-  baseURL: BASE_URL,
+  // Empty baseURL = relative paths → routed through Vite proxy → no CORS
+  baseURL: '',
   timeout: 300000, // 5 minutes for heavy ML/analysis endpoints
   headers: { 'Accept': 'application/json' },
 });
@@ -45,7 +46,7 @@ api.interceptors.response.use(
 
     // Enrich error so UI components can read .userMessage directly
     error.userMessage =
-      status === 0       ? 'Cannot reach KARTA backend. Make sure the server is running on :8000.' :
+      !status            ? 'Cannot reach KARTA backend. Make sure the server is running.' :
       status === 400     ? `Bad request: ${detail}` :
       status === 404     ? `Not found: ${detail}` :
       status === 422     ? `Validation error: ${detail}` :

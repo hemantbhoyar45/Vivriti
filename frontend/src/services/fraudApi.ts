@@ -2,7 +2,7 @@
  * FILE 4 — fraudApi.ts
  * GST mismatch, circular trading graph, MCA X-Ray.
  */
-import api, { BASE_URL } from './apiConfig';
+import api from './apiConfig';
 
 export interface GSTDetector {
   gstr_2a_amount: number;
@@ -73,7 +73,7 @@ export async function getFraudResults(analysisId: number): Promise<FraudResults>
  * Embed this in an <iframe src={url} /> to show the interactive graph.
  */
 export function getCircularTradingGraphUrl(analysisId: number): string {
-  return `${BASE_URL}/api/fraud/graph/${analysisId}`;
+  return `${window.location.origin}/api/fraud/graph/${analysisId}`;
 }
 
 /**

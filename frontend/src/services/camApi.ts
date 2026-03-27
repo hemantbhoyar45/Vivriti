@@ -2,7 +2,7 @@
  * FILE 5 — camApi.ts
  * CAM generation, preview, and real file download.
  */
-import api, { BASE_URL } from './apiConfig';
+import api from './apiConfig';
 
 export interface CAMGenerateResult {
   success: boolean;
@@ -46,7 +46,7 @@ export async function getCAMPreview(analysisId: number): Promise<CAMPreview> {
  * format: 'word' | 'pdf'
  */
 export function downloadCAM(analysisId: number, format: 'word' | 'pdf'): void {
-  const url = `${BASE_URL}/api/cam/download/${analysisId}?format=${format}`;
+  const url = `${window.location.origin}/api/cam/download/${analysisId}?format=${format}`;
   const a = document.createElement('a');
   a.href = url;
   a.target = '_blank';

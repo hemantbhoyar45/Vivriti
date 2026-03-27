@@ -2,7 +2,7 @@
  * FILE 3 — resultsApi.ts
  * Full Dashboard results — all numbers come from real backend response.
  */
-import api, { BASE_URL } from './apiConfig';
+import api from './apiConfig';
 
 export interface SHAPFactor  { name: string; impact: string; }
 export interface NewsSignal  { source: string; date: string; description: string; }
@@ -56,5 +56,5 @@ export async function getFullResults(analysisId: number): Promise<FullResults> {
  * The <img> tag can use this directly as src.
  */
 export function getSHAPChartUrl(analysisId: number): string {
-  return `${BASE_URL}/api/shap-chart/${analysisId}`;
+  return `${window.location.origin}/api/shap-chart/${analysisId}`;
 }
