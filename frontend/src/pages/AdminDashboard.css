@@ -432,3 +432,369 @@
 .tab-content-full {
   margin: -2rem; /* Negate container padding */
 }
+
+/* ─── ENTERPRISE ADMIN PANEL ───────────────────────────────────── */
+.ap-enterprise {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+/* Metric Row */
+.ap-metric-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+}
+
+.ap-metric-card {
+  background: white;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  transition: box-shadow 0.2s;
+}
+
+.ap-metric-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+
+.ap-metric-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ap-metric-label {
+  font-size: 0.78rem;
+  color: #64748B;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.ap-metric-value {
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.ap-metric-delta {
+  font-size: 0.75rem;
+  color: #94A3B8;
+  margin-top: 4px;
+}
+
+/* Two-column layout */
+.ap-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+/* Card */
+.ap-card {
+  background: white;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+}
+
+.ap-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1E293B;
+  margin-bottom: 1.25rem;
+}
+
+.ap-card-desc {
+  font-size: 0.85rem;
+  color: #64748B;
+  margin-bottom: 0.5rem;
+}
+
+.ap-card-subheader {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+}
+
+.ap-divider {
+  height: 1px;
+  background: #F1F5F9;
+  margin: 1.25rem 0;
+}
+
+/* Toggle rows */
+.ap-toggle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #F8FAFC;
+  font-size: 0.9rem;
+  color: #334155;
+}
+
+/* RBAC pills */
+.ap-rbac-pills {
+  display: flex;
+  gap: 8px;
+}
+
+.ap-role-pill {
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  border: 1.5px solid #E2E8F0;
+  background: white;
+  color: #64748B;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+
+.ap-role-pill:hover {
+  border-color: #4F46E5;
+  color: #4F46E5;
+}
+
+.ap-role-pill-active {
+  background: #4F46E5;
+  border-color: #4F46E5;
+  color: white;
+}
+
+/* Regen button */
+.ap-btn-regen {
+  background: #0F172A !important;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* btn-copy flex */
+.btn-copy {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* API bar chart */
+.ap-api-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.ap-api-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ap-endpoint {
+  font-size: 0.75rem;
+  color: #94A3B8;
+  width: 140px;
+  flex-shrink: 0;
+}
+
+.ap-bar-wrap {
+  flex: 1;
+  height: 6px;
+  background: #F1F5F9;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.ap-bar {
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.4s ease;
+}
+
+.ap-calls {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #334155;
+  width: 32px;
+  text-align: right;
+}
+
+/* Fraud list */
+.ap-fraud-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.ap-fraud-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid #F8FAFC;
+}
+
+.ap-fraud-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.ap-fraud-company {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1E293B;
+}
+
+.ap-fraud-issue {
+  font-size: 0.78rem;
+  color: #64748B;
+}
+
+.ap-risk-badge {
+  padding: 0.25rem 0.7rem;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
+.ap-risk-high   { background: #FEF2F2; color: #DC2626; }
+.ap-risk-medium { background: #FFFBEB; color: #D97706; }
+.ap-risk-low    { background: #F0FDF4; color: #16A34A; }
+
+/* AI Model Grid */
+.ap-model-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.ap-model-stat {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0.75rem;
+  background: #FAFAFA;
+  border-radius: 10px;
+  border: 1px solid #F1F5F9;
+}
+
+.ap-model-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ap-model-label {
+  font-size: 0.72rem;
+  color: #94A3B8;
+  font-weight: 500;
+}
+
+.ap-model-value {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1E293B;
+}
+
+.ap-retrain-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  justify-content: center;
+  padding: 0.75rem;
+  background: linear-gradient(135deg, #1C335B, #4F46E5);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.ap-retrain-btn:hover { opacity: 0.9; }
+
+/* System Logs */
+.ap-logs-card { padding-bottom: 0.5rem; }
+
+.ap-logs-list {
+  display: flex;
+  flex-direction: column;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.ap-log-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid #F8FAFC;
+  font-size: 0.85rem;
+}
+
+.ap-log-time {
+  color: #94A3B8;
+  font-size: 0.75rem;
+  width: 72px;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.ap-log-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.ap-log-dot-info    { background: #4F46E5; }
+.ap-log-dot-success { background: #10B981; }
+.ap-log-dot-danger  { background: #DC2626; }
+.ap-log-dot-warn    { background: #F59E0B; }
+
+.ap-log-user {
+  color: #64748B;
+  font-weight: 500;
+  width: 140px;
+  flex-shrink: 0;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ap-log-action {
+  color: #334155;
+  flex: 1;
+}
+

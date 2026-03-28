@@ -269,68 +269,153 @@
 }
 
 /* Sidebar Styles */
-.analysis-page .sidebar-title {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--text-light);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  margin-bottom: 1.5rem;
+.analysis-page .enhanced-sidebar {
+  background: linear-gradient(to bottom, #FAFAFA, #FFFFFF);
 }
 
-.analysis-page .sidebar-list {
+.analysis-page .sidebar-title {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--text-light);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+}
+
+.analysis-page .enhanced-features-list {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 0.75rem;
   margin-bottom: 2rem;
 }
 
-.analysis-page .sidebar-list-item {
+.analysis-page .enhanced-feature-card {
   display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  font-size: 0.85rem;
-  color: var(--text-dark);
-  font-weight: 500;
-}
-
-.analysis-page .sidebar-list-icon {
-  color: var(--primary);
-  flex-shrink: 0;
-}
-
-.analysis-page .testimonial {
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
   background: white;
-  padding: 1rem;
-  border-radius: 0.5rem;
   border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  transition: all 0.25s ease;
+  cursor: default;
+  /* subtle slide-up animation effect */
+  animation: slideUpFade 0.5s ease backwards;
 }
 
-.analysis-page .testimonial-text {
-  font-size: 0.8rem;
-  color: var(--text-gray);
+@keyframes slideUpFade {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.analysis-page .enhanced-feature-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px -6px rgba(0, 0, 0, 0.08);
+  border-color: #CBD5E1;
+}
+
+.analysis-page .enhanced-feature-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.analysis-page .enhanced-feature-card:hover .enhanced-feature-icon {
+  transform: scale(1.1);
+}
+
+.analysis-page .enhanced-feature-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.analysis-page .enhanced-feature-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 2px;
+}
+
+.analysis-page .enhanced-feature-desc {
+  font-size: 0.7rem;
+  color: var(--text-light);
+  line-height: 1.3;
+}
+
+.analysis-page .enhanced-testimonial {
+  position: relative;
+  background: linear-gradient(135deg, #1C335B, #2C4B82);
+  padding: 1.5rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(28, 51, 91, 0.15);
+}
+
+.analysis-page .quote-icon-bg {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  color: rgba(255, 255, 255, 0.1);
+}
+
+.analysis-page .enhanced-testimonial-text {
+  position: relative;
+  z-index: 1;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.95);
   font-style: italic;
-  margin-bottom: 1rem;
+  font-weight: 500;
+  margin-bottom: 1.25rem;
   line-height: 1.5;
 }
 
-.analysis-page .testimonial-author {
+.analysis-page .enhanced-testimonial-author {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
+  position: relative;
+  z-index: 1;
 }
 
-.analysis-page .author-avatar {
-  width: 1.5rem;
-  height: 1.5rem;
-  background-color: #E2E8F0;
+.analysis-page .enhanced-author-avatar {
+  width: 2rem;
+  height: 2rem;
+  background-color: rgba(255, 255, 255, 0.2);
   border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-.analysis-page .author-info {
+.analysis-page .enhanced-author-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.analysis-page .enhanced-author-name {
   font-size: 0.75rem;
   font-weight: 700;
-  color: var(--text-dark);
+  color: white;
+  letter-spacing: 0.02em;
+}
+
+.analysis-page .enhanced-author-company {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
 }
 
 /* Footer */

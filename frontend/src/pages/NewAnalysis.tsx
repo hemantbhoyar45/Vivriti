@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { Triangle, CloudUpload, FileUp, FileText, CheckCircle2 } from 'lucide-react';
+import { Triangle, CloudUpload, FileUp, FileText, TrendingUp, AlertOctagon, UserCheck, Newspaper, Briefcase, Quote } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { uploadCompanyDocuments } from '../services/uploadApi';
 import { triggerAnalysis } from '../services/analysisApi';
 import { ErrorBanner } from '../services/useApi';
 import './NewAnalysis.css';
 
-function NewAnalysis() {
+function NewAnalysis({ hideNavbar = false }: { hideNavbar?: boolean }) {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ companyName: '', cin: '', gstin: '', pan: '', amount: '' });
   const [files, setFiles] = useState({ balanceSheet: null as File | null, bankStatements: null as File | null, gstFilings: null as File | null });
@@ -62,6 +62,7 @@ function NewAnalysis() {
 
   return (
     <div className="analysis-page">
+      {!hideNavbar && (
       <nav className="navbar">
         <div className="logo" style={{ color: '#1C335B' }}>
           <Triangle size={24} fill="#1C335B" stroke="none" style={{ transform: 'rotate(180deg)' }} />
@@ -73,6 +74,7 @@ function NewAnalysis() {
           <Link to="/new-analysis" className="nav-link active" style={{ color: '#1C335B' }}>New Analysis</Link>
         </div>
       </nav>
+      )}
 
       <div className="layout-container">
         <div className="card form-card">
@@ -169,28 +171,47 @@ function NewAnalysis() {
           </form>
         </div>
 
-        <div className="card sidebar-card">
+        <div className="card sidebar-card enhanced-sidebar">
           <div className="sidebar-title">WHAT KARTA ANALYSES:</div>
-          <div className="sidebar-list">
-            {['Financial ratios and trends', 'GST mismatch and fraud', 'Promoter background check', 'News and market signals', 'Sector-specific risk scoring']
-              .map((item, i) => (
-                <div key={i} className="sidebar-list-item">
-                  <CheckCircle2 size={18} fill="#1C335B" color="white" className="sidebar-list-icon" />
-                  <span>{item}</span>
+          <div className="enhanced-features-list">
+            {[
+              { title: 'Financial ratios and trends', desc: 'Analyzes revenue, profitability, and growth', icon: <TrendingUp size={18} />, color: '#4F46E5', bg: '#EEF2FF' },
+              { title: 'GST mismatch and fraud', desc: 'Detects anomalies and fraudulent transactions', icon: <AlertOctagon size={18} />, color: '#DC2626', bg: '#FEF2F2' },
+              { title: 'Promoter background check', desc: 'Evaluates credibility and past records', icon: <UserCheck size={18} />, color: '#059669', bg: '#ECFDF5' },
+              { title: 'News and market signals', desc: 'Uses AI to analyze sentiment from news', icon: <Newspaper size={18} />, color: '#D97706', bg: '#FFFBEB' },
+              { title: 'Sector-specific risk scoring', desc: 'Applies industry-based risk models', icon: <Briefcase size={18} />, color: '#7C3AED', bg: '#F5F3FF' }
+            ].map((feat, i) => (
+              <div key={i} className="enhanced-feature-card" style={{ animationDelay: `${i * 0.1}s` }}>
+                <div className="enhanced-feature-icon" style={{ backgroundColor: feat.bg, color: feat.color }}>
+                  {feat.icon}
                 </div>
-              ))}
+                <div className="enhanced-feature-text">
+                  <div className="enhanced-feature-title">{feat.title}</div>
+                  <div className="enhanced-feature-desc">{feat.desc}</div>
+                </div>
+              </div>
+            ))}
           </div>
-          <div className="testimonial">
-            <p className="testimonial-text">"KARTA simplified our due diligence from weeks to minutes."</p>
-            <div className="testimonial-author">
-              <div className="author-avatar"></div>
-              <div className="author-info">CTO, FinBank</div>
+
+          <div className="enhanced-testimonial">
+            <Quote size={32} className="quote-icon-bg" />
+            <p className="enhanced-testimonial-text">
+              "KARTA simplified our due diligence from weeks to minutes. A true game changer."
+            </p>
+            <div className="enhanced-testimonial-author">
+              <div className="enhanced-author-avatar">FB</div>
+              <div className="enhanced-author-info">
+                <span className="enhanced-author-name">CTO</span>
+                <span className="enhanced-author-company">FinBank India</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <footer className="footer">© 2024 KARTA AI Technologies. All rights reserved.</footer>
+      {!hideNavbar && (
+        <footer className="footer">© 2024 KARTA AI Technologies. All rights reserved.</footer>
+      )}
     </div>
   );
 }
