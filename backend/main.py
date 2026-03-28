@@ -9,8 +9,9 @@ from fastapi import Depends
 from database import engine, Base, SessionLocal, get_db
 from sqlalchemy.orm import Session
 from utils.demo_data import load_demo_data, reset_demo_data
-from routers import upload, analyze, fraud, scoring, cam, ews, health, ws, history, ews_ws, health_live, auth
+from routers import upload, analyze, fraud, scoring, cam, ews, health, ws, history, ews_ws, health_live, auth, draft
 from models.user import User
+from models.draft import FormDraft
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -57,6 +58,7 @@ app.include_router(ws.router)
 app.include_router(ews_ws.router)          # EWS WebSocket: ws://localhost:8000/ws/ews/{id}
 app.include_router(health_live.router)    # Live health: GET /api/health/live and ws://localhost:8000/ws/health
 app.include_router(auth.router)
+app.include_router(draft.router)
 
 @app.get("/health")
 def health_check():

@@ -3,16 +3,217 @@ import {
     LayoutDashboard, Users, Shield, History, LogOut, Search,
     FileText, AlertTriangle, BarChart3, RefreshCw, Copy,
     CheckCircle, Cpu, Activity, Lock, Globe, Clock,
-    TrendingUp, Zap, Bell
+    TrendingUp, Zap, Bell, ChevronDown, User,
+    Save, Building, Briefcase, Key, ShieldCheck, Monitor, MapPin
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import './AdminDashboard.css';
 import HistoryPage from './History';
 import NewAnalysis from './NewAnalysis';
 
-const AdminDashboard: React.FC = () => {
+const ProfileSettings = ({ user }: { user: any }) => {
+    const [name, setName] = useState(user?.name || '');
+    const [org, setOrg] = useState('Vivriti Financial');
+    const [dept, setDept] = useState('Risk & Compliance');
+    const [emailNotif, setEmailNotif] = useState(true);
+    const [fraudAlerts, setFraudAlerts] = useState(true);
+    const [saved, setSaved] = useState(false);
+
+    const handleSave = (e: React.FormEvent) => {
+        e.preventDefault();
+        setSaved(true);
+        setTimeout(() => setSaved(false), 3000);
+    };
+
+    return (
+        <div className="tab-content">
+            <h2 className="tab-title">Profile Settings</h2>
+            <form onSubmit={handleSave}>
+                <div className="settings-layout">
+                    {/* Left Column */}
+                    <div className="settings-section" style={{ flex: 2 }}>
+                        <h3>Personal Information</h3>
+                        <div className="profile-edit-header">
+                            <div className="profile-avatar-xl">{user?.name?.[0]?.toUpperCase() || 'A'}</div>
+                            <button type="button" className="btn-outline">Change Avatar</button>
+                        </div>
+                        <div className="form-grid">
+                            <div className="form-group">
+                                <label className="form-label">Full Name</label>
+                                <input type="text" className="form-input" value={name} onChange={e => setName(e.target.value)} required />
+                            </div>
+                            <div className="form-group">
+                                <label className="form-label">Email Address (Read-only)</label>
+                                <input type="email" className="form-input disabled" value={user?.email || 'admin@karta.ai'} readOnly />
+                            </div>
+                            <div className="form-group">
+                                <label className="form-label">Phone Number</label>
+                                <input type="text" className="form-input" placeholder="+91 98765 43210" />
+                            </div>
+                            <div className="form-group">
+                                <label className="form-label">Role</label>
+                                <input type="text" className="form-input disabled" value={user?.role?.toUpperCase() || 'SUPER ADMIN'} readOnly />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Right Column */}
+                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                        <div className="settings-section">
+                            <h3>Professional Info</h3>
+                            <div className="form-group" style={{ marginBottom: '1rem' }}>
+                                <label className="form-label"><Building size={14} style={{marginRight: 6, verticalAlign: 'text-bottom'}}/> Organization</label>
+                                <input type="text" className="form-input" value={org} onChange={e => setOrg(e.target.value)} />
+                            </div>
+                            <div className="form-group">
+                                <label className="form-label"><Briefcase size={14} style={{marginRight: 6, verticalAlign: 'text-bottom'}}/> Department</label>
+                                <input type="text" className="form-input" value={dept} onChange={e => setDept(e.target.value)} />
+                            </div>
+                        </div>
+
+                        <div className="settings-section">
+                            <h3>Preferences</h3>
+                            <div className="setting-toggle-row">
+                                <span>Email Notifications</span>
+                                <div className={`toggle-switch ${emailNotif ? 'active' : ''}`} onClick={() => setEmailNotif(!emailNotif)}>
+                                    <div className="toggle-knob" />
+                                </div>
+                            </div>
+                            <div className="setting-toggle-row">
+                                <span>Fraud Alerts (Instant)</span>
+                                <div className={`toggle-switch ${fraudAlerts ? 'active' : ''}`} onClick={() => setFraudAlerts(!fraudAlerts)}>
+                                    <div className="toggle-knob" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="settings-actions">
+                    <button type="submit" className="btn-primary" style={{ marginTop: '2rem' }}>
+                        <Save size={16} /> Save Changes
+                    </button>
+                    {saved && <span className="save-success-msg"><CheckCircle size={16}/> Profile updated successfully</span>}
+                </div>
+            </form>
+        </div>
+    );
+};
+
+const SecuritySettings = () => {
     const { logout } = useAuth();
+    const [mfa, setMfa] = useState(true);
+    const [ipRestrict, setIpRestrict] = useState(false);
+    const [sessionTimeout, setSessionTimeout] = useState('30m');
+    const [saved, setSaved] = useState(false);
+    const [showKey, setShowKey] = useState(false);
+    
+    const handlePassChange = (e: React.FormEvent) => {
+        e.preventDefault();
+        setSaved(true);
+        setTimeout(() => setSaved(false), 3000);
+    };
+
+    return (
+        <div className="tab-content">
+            <h2 className="tab-title">Security Settings</h2>
+            
+            <div className="settings-layout">
+                {/* Left col */}
+                <div style={{ flex: 2, display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                    <div className="settings-section">
+                        <h3><Key size={18} style={{marginRight: 8, verticalAlign: 'text-bottom'}}/> Change Password</h3>
+                        <form onSubmit={handlePassChange}>
+                            <div className="form-group" style={{ marginBottom: '1rem' }}>
+                                <label className="form-label">Current Password</label>
+                                <input type="password" className="form-input" required />
+                            </div>
+                            <div className="form-grid">
+                                <div className="form-group">
+                                    <label className="form-label">New Password</label>
+                                    <input type="password" className="form-input" required />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">Confirm Password</label>
+                                    <input type="password" className="form-input" required />
+                                </div>
+                            </div>
+                            <div className="password-strength">
+                                <div className="str-bar str-medium"></div>
+                                <span className="str-text">Strength: Medium. Include a number and symbol.</span>
+                            </div>
+                            <div style={{display: 'flex', alignItems: 'center'}}>
+                                <button type="submit" className="btn-primary" style={{ marginTop: '1.5rem' }}>Update Password</button>
+                                {saved && <span className="save-success-msg" style={{ marginLeft: '1rem', marginTop: '1.5rem' }}><CheckCircle size={16}/> Changed</span>}
+                            </div>
+                        </form>
+                    </div>
+
+                    <div className="settings-section">
+                        <h3><Globe size={18} style={{marginRight: 8, verticalAlign: 'text-bottom'}}/> API & Access Security</h3>
+                        <div className="api-key-box" style={{marginTop: 0}}>
+                            <code>{showKey ? 'karta_sk_live_28374h89h2348923h4' : 'karta_sk_live_******************'}</code>
+                            <div style={{ display: 'flex', gap: '8px' }}>
+                                <button className="btn-copy" onClick={() => setShowKey(!showKey)}>{showKey ? 'Hide' : 'Reveal'}</button>
+                                <button className="btn-copy ap-btn-regen"><RefreshCw size={12}/> Regen</button>
+                            </div>
+                        </div>
+                        <p className="security-note" style={{ marginTop: '0.75rem', textAlign: 'left', margin: '0.75rem 0 0 0' }}>Use this key to authenticate external system webhooks.</p>
+                    </div>
+                </div>
+
+                {/* Right col */}
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                    <div className="settings-section">
+                        <h3><ShieldCheck size={18} style={{marginRight: 8, verticalAlign: 'text-bottom'}}/> Security Preferences</h3>
+                        <div className="setting-toggle-row">
+                            <span>Two-Factor Auth <br/><span style={{fontSize: '0.75rem', color: '#64748B'}}>{mfa ? 'Enabled' : 'Disabled'} via App</span></span>
+                            <div className={`toggle-switch ${mfa ? 'active' : ''}`} onClick={() => setMfa(!mfa)}>
+                                <div className="toggle-knob" />
+                            </div>
+                        </div>
+                        <div className="setting-toggle-row">
+                            <span>IP Restriction <br/><span style={{fontSize: '0.75rem', color: '#64748B'}}>Require VPN to login</span></span>
+                            <div className={`toggle-switch ${ipRestrict ? 'active' : ''}`} onClick={() => setIpRestrict(!ipRestrict)}>
+                                <div className="toggle-knob" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="settings-section" style={{flex: 1}}>
+                        <h3><Monitor size={18} style={{marginRight: 8, verticalAlign: 'text-bottom'}}/> Session Management</h3>
+                        <div className="form-group" style={{ marginBottom: '1.5rem' }}>
+                            <label className="form-label">Auto-Logout Timeout</label>
+                            <select className="form-input" value={sessionTimeout} onChange={e => setSessionTimeout(e.target.value)}>
+                                <option value="15m">15 Minutes</option>
+                                <option value="30m">30 Minutes</option>
+                                <option value="1h">1 Hour</option>
+                            </select>
+                        </div>
+                        
+                        <div className="active-session">
+                            <div className="session-icon"><Monitor size={16}/></div>
+                            <div className="session-info">
+                                <strong>Current Session</strong>
+                                <span>Windows • Chrome</span>
+                                <span><MapPin size={12} style={{marginRight: 4, verticalAlign: 'sub'}}/> Mumbai, IN</span>
+                            </div>
+                            <div className="session-status">Active</div>
+                        </div>
+
+                        <button className="btn-outline" style={{ color: '#DC2626', borderColor: '#DC2626', width: '100%', marginTop: '1.5rem', justifyContent: 'center' }} onClick={logout}>
+                            <LogOut size={16} /> Logout from all devices
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const AdminDashboard: React.FC = () => {
+    const { user, logout } = useAuth();
     const [activeTab, setActiveTab] = useState('operations');
+    const [dropdownOpen, setDropdownOpen] = useState(false);
     const [copied, setCopied] = useState(false);
     const [apiKey] = useState('karta_sk_live_2837xxxxxx');
     const [rbacRole, setRbacRole] = useState('Admin');
@@ -248,6 +449,10 @@ const AdminDashboard: React.FC = () => {
                         <HistoryPage hideNavbar={true} />
                     </div>
                 );
+            case 'profile':
+                return <ProfileSettings user={user} />;
+            case 'security':
+                return <SecuritySettings />;
             default:
                 return <div>Select a section</div>;
         }
@@ -305,12 +510,66 @@ const AdminDashboard: React.FC = () => {
                         <Search size={18} />
                         <input type="text" placeholder="Search appraisals, clients, or logs..." />
                     </div>
-                    <div className="admin-profile">
+                    <div className="admin-profile" onClick={() => setDropdownOpen(!dropdownOpen)}>
                         <div className="profile-info">
-                            <span className="profile-name">Admin</span>
-                            <span className="profile-role"></span>
+                            <span className="profile-name">{user?.name || 'Admin'}</span>
+                            <span className="profile-role">{user?.role?.toUpperCase() || 'System'}</span>
                         </div>
-                        <div className="profile-avatar">S</div>
+                        <div className="profile-avatar">{user?.name?.[0]?.toUpperCase() || 'A'}</div>
+                        <ChevronDown size={14} className={`dropdown-arrow ${dropdownOpen ? 'open' : ''}`} />
+
+                        {dropdownOpen && (
+                            <div className="profile-dropdown" onClick={(e) => e.stopPropagation()}>
+                                <div className="dropdown-header">
+                                    <div className="dropdown-avatar-lg">{user?.name?.[0]?.toUpperCase() || 'A'}</div>
+                                    <div className="dropdown-user-details">
+                                        <span className="dropdown-name">{user?.name || 'System Administrator'}</span>
+                                        <span className="dropdown-email">{user?.email || 'admin@karta.ai'}</span>
+                                        <span className="dropdown-role-badge">{user?.role?.toUpperCase() || 'SUPER ADMIN'}</span>
+                                    </div>
+                                </div>
+                                <div className="dropdown-divider"></div>
+
+                                <div className="dropdown-section">
+                                    <span className="dropdown-section-title">Settings</span>
+                                    <button className="dropdown-item" onClick={() => { setActiveTab('profile'); setDropdownOpen(false); }}><User size={14} /> Profile Settings</button>
+                                    <button className="dropdown-item" onClick={() => { setActiveTab('security'); setDropdownOpen(false); }}><Lock size={14} /> Security Settings</button>
+                                </div>
+                                <div className="dropdown-divider"></div>
+
+                                <div className="dropdown-section">
+                                    <span className="dropdown-section-title">Quick Links</span>
+                                    <button className="dropdown-item" onClick={() => { setActiveTab('operations'); setDropdownOpen(false); }}><LayoutDashboard size={14} /> Operations View</button>
+                                    <button className="dropdown-item" onClick={() => { setActiveTab('admin'); setDropdownOpen(false); }}><Shield size={14} /> Admin Panel</button>
+                                    <button className="dropdown-item" onClick={() => { setActiveTab('history'); setDropdownOpen(false); }}><History size={14} /> Company History</button>
+                                </div>
+                                <div className="dropdown-divider"></div>
+
+                                <div className="dropdown-section">
+                                    <span className="dropdown-section-title">System Status</span>
+                                    <div className="dropdown-status-item">
+                                        <span><Cpu size={12} color="#10B981" /> AI Engine</span>
+                                        <span className="status-text-green">Active</span>
+                                    </div>
+                                    <div className="dropdown-status-item">
+                                        <span><Globe size={12} color="#10B981" /> API Status</span>
+                                        <span className="status-text-green">Connected</span>
+                                    </div>
+                                    <div className="dropdown-status-item">
+                                        <span><CheckCircle size={12} color="#4F46E5" /> Accuracy</span>
+                                        <span className="status-text-blue">94%</span>
+                                    </div>
+                                    <div className="dropdown-last-login">
+                                        <Clock size={12} /> Last Login: 12 minutes ago
+                                    </div>
+                                </div>
+                                
+                                <div className="dropdown-divider"></div>
+                                <button className="dropdown-item dropdown-logout" onClick={() => { setDropdownOpen(false); logout(); }}>
+                                    <LogOut size={14} /> Sign Out
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </header>
                 <div className="admin-content-area">

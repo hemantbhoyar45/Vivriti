@@ -132,9 +132,10 @@ function Analysis() {
         <div className="tracking-card">
           <div className="tracking-header">
             <div className="header-left">
-              <h1>Analysis #{analysisId} — Running Live</h1>
+              <h1>Analysis {analysisId} — Running Live</h1>
               <p>KARTA AI is connected to backend WebSocket</p>
             </div>
+            
             <div className="header-right">
               <span className="progress-text">{Math.round(progress)}% Complete</span>
               <div className="progress-bar-container">

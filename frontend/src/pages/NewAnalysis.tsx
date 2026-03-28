@@ -1,21 +1,76 @@
-import { useState } from 'react';
-import { Triangle, CloudUpload, FileUp, FileText, TrendingUp, AlertOctagon, UserCheck, Newspaper, Briefcase, Quote } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Triangle, CloudUpload, FileUp, FileText, TrendingUp, AlertOctagon, UserCheck, Newspaper, Briefcase, Quote, RefreshCw, CheckCircle } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { uploadCompanyDocuments } from '../services/uploadApi';
 import { triggerAnalysis } from '../services/analysisApi';
 import { ErrorBanner } from '../services/useApi';
+import { useAuth } from '../context/AuthContext';
+import api from '../services/apiConfig';
 import './NewAnalysis.css';
 
 function NewAnalysis({ hideNavbar = false }: { hideNavbar?: boolean }) {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  
   const [formData, setFormData] = useState({ companyName: '', cin: '', gstin: '', pan: '', amount: '' });
   const [files, setFiles] = useState({ balanceSheet: null as File | null, bankStatements: null as File | null, gstFilings: null as File | null });
   const [uploadPct, setUploadPct] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  
+  // Persistence States
+  const [isFetching, setIsFetching] = useState(true);
+  const [lastFilledTime, setLastFilledTime] = useState<string | null>(null);
+  const [isAutofilled, setIsAutofilled] = useState(false);
+  const [draftData, setDraftData] = useState<any>(null);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+  useEffect(() => {
+    const fetchLatest = async () => {
+      try {
+        const res = await api.get('/api/analysis/latest', {
+          headers: { 'X-User-Email': user?.email || 'admin@gmail.com' }
+        });
+        if (res.data?.data) {
+           const d = res.data.data;
+           setDraftData(d);
+           setFormData({
+             companyName: d.company_name || '',
+             cin: d.cin || '',
+             gstin: d.gstin || '',
+             pan: d.pan || '',
+             amount: d.amount ? String(d.amount) : '',
+           });
+           setLastFilledTime(new Date(d.updated_at || d.created_at || new Date()).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }));
+           setIsAutofilled(true);
+        }
+      } catch (e) {
+        console.error("Failed to fetch draft", e);
+      } finally {
+        setIsFetching(false);
+      }
+    };
+    
+    // Short artificial delay to demonstrate the elegant loading state
+    setTimeout(fetchLatest, 600);
+  }, [user]);
+
+  const handleLoadPrevious = () => {
+      if (draftData) {
+           setFormData({
+             companyName: draftData.company_name || '',
+             cin: draftData.cin || '',
+             gstin: draftData.gstin || '',
+             pan: draftData.pan || '',
+             amount: draftData.amount ? String(draftData.amount) : '',
+           });
+           setIsAutofilled(true);
+      }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    setIsAutofilled(false);
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, type: keyof typeof files) => {
     if (e.target.files?.[0]) setFiles({ ...files, [type]: e.target.files[0] });
@@ -34,6 +89,18 @@ function NewAnalysis({ hideNavbar = false }: { hideNavbar?: boolean }) {
 
     setIsSubmitting(true);
     setUploadPct(0);
+    
+    // Save data to Drafts (fire-and-forget)
+    api.post('/api/analysis/save', {
+      company_name: formData.companyName,
+      cin_number: formData.cin,
+      gstin_number: formData.gstin,
+      pan_number: formData.pan,
+      loan_amount: parseFloat(formData.amount) || 0
+    }, {
+      headers: { 'X-User-Email': user?.email || 'admin@gmail.com' }
+    }).catch(console.error);
+
     try {
       // STEP 1: Upload files with real byte progress
       const result = await uploadCompanyDocuments({
@@ -82,6 +149,21 @@ function NewAnalysis({ hideNavbar = false }: { hideNavbar?: boolean }) {
           <p className="subtitle">Enter company details and upload financial documents to begin</p>
           <div className="divider"></div>
 
+          {isFetching && (
+              <div className="fetch-banner">
+                  <RefreshCw size={14} className="spin" /> Fetching previous analysis...
+              </div>
+          )}
+
+          {lastFilledTime && !isFetching && (
+              <div className="autofill-banner">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                     <CheckCircle size={14} /> Auto-filled from last entry on {lastFilledTime}
+                  </div>
+                  <button type="button" onClick={handleLoadPrevious} className="btn-load-prev">Load Previous Data</button>
+              </div>
+          )}
+
           <ErrorBanner message={errorMsg} onRetry={() => setErrorMsg('')} />
 
           <form onSubmit={handleSubmit}>
@@ -94,14 +176,14 @@ function NewAnalysis({ hideNavbar = false }: { hideNavbar?: boolean }) {
               ].map(({ label, name, placeholder, value }) => (
                 <div className="form-group" key={name}>
                   <label className="form-label">{label} <span style={{ color: 'red' }}>*</span></label>
-                  <input type="text" name={name} className="form-input" placeholder={placeholder}
+                  <input type="text" name={name} className={`form-input ${isAutofilled ? 'autofilled-glow' : ''}`} placeholder={placeholder}
                     value={value} onChange={handleInputChange} required />
                 </div>
               ))}
 
               <div className="form-group full-width">
                 <label className="form-label">Loan Amount Requested <span style={{ color: 'red' }}>*</span></label>
-                <div className="input-with-prefix" style={{ border: '1px solid #e2e8f0', borderRadius: '0.375rem', overflow: 'hidden' }}>
+                <div className={`input-with-prefix ${isAutofilled ? 'autofilled-glow' : ''}`} style={{ border: isAutofilled ? '1.5px solid #4F46E5' : '1px solid #e2e8f0', borderRadius: '0.375rem', overflow: 'hidden' }}>
                   <span className="input-prefix">₹</span>
                   <input type="number" name="amount" className="form-input" placeholder="e.g. 30000000 for ₹3 Crore"
                     style={{ border: 'none', borderRadius: 0, boxShadow: 'none' }}
