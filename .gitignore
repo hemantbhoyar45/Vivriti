@@ -22,7 +22,6 @@ npm-debug.log*
 
 # Editor
 .vscode/
-.idea/
 .DS_Store
 
 # DB
