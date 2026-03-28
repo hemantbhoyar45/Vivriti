@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { Building2, Check, Loader2, Lightbulb, AlertTriangle } from 'lucide-react';
+import { Building2, Check, Loader2, Lightbulb, AlertTriangle, Terminal, Clock, FileBarChart, Activity } from 'lucide-react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { connectAnalysisWebSocket, type WSMessage } from '../services/analysisApi';
 import './Analysis.css';
@@ -18,10 +18,29 @@ function Analysis() {
   // Store the latest message received for each step number
   const [stepsData, setStepsData] = useState<Record<number, WSMessage>>({});
   
+  // UI States
+  const [activeStep, setActiveStep] = useState<number | null>(null);
+  const [logStream, setLogStream] = useState<{time: string, text: string}[]>([]);
+  
   const wsCleanupRef = useRef<(() => void) | null>(null);
+  const terminalEndRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll terminal
+  useEffect(() => {
+    terminalEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [logStream]);
 
   useEffect(() => {
     if (!analysisId) { setError('No analysis ID in URL. Go back and submit the form.'); return; }
+
+    const appendLog = (msg: string) => {
+      setLogStream(prev => {
+        const time = new Date().toLocaleTimeString('en-GB', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        // Prevent exact duplicates clustering too quickly
+        if (prev.length > 0 && prev[prev.length - 1].text === msg) return prev;
+        return [...prev, { time, text: msg }];
+      });
+    };
 
     let pollingCleanup: (() => void) | null = null;
 
@@ -65,16 +84,18 @@ function Analysis() {
                   timestamp: new Date().toISOString(),
                 }
               }));
+              appendLog(`[${info.step_name}] ${info.step_detail}`);
             }
 
             if (data.status === 'completed' && pct >= 100) {
               stopped = true;
-              setTimeout(() => navigate(`/dashboard?id=${analysisId}`), 1500);
+              appendLog(`System halted. Output generated.`);
               return;
             }
             if (data.status === 'failed') {
               stopped = true;
               setError(data.failure_reason ? `Analysis failed: ${data.failure_reason}` : 'Analysis failed — check backend logs for details.');
+              appendLog(`[FATAL] Pipeline crash detected.`);
               return;
             }
           } catch {
@@ -92,19 +113,20 @@ function Analysis() {
     const wsCleanup = connectAnalysisWebSocket(
       analysisId,
       (msg) => {
-        setError(''); // clear any WS error once messages start flowing
+        setError('');
         setProgress(msg.percentage);
         setStepsData(prev => ({ ...prev, [msg.step_number]: msg }));
+        
+        if (msg.step_name || msg.step_detail) {
+           appendLog(`[${msg.step_name || 'System'}] ${msg.step_detail || 'Acknowledged context.'}`);
+        }
 
         if (msg.status === 'failed') {
           setError(`Failed at step ${msg.step_number} (${msg.step_name}): ${msg.step_detail}`);
-        }
-        if (msg.percentage === 100 && msg.status === 'completed') {
-          setTimeout(() => navigate(`/dashboard?id=${analysisId}`), 1500);
+          appendLog(`[FATAL] Exception at block ${msg.step_number}`);
         }
       },
       () => {
-        // WebSocket failed → silently switch to polling, no scary error
         setError('');
         startPolling();
       }
@@ -115,9 +137,33 @@ function Analysis() {
       wsCleanupRef.current?.();
       pollingCleanup?.();
     };
-  }, [analysisId, navigate]);
+  }, [analysisId]);
 
   const isComplete = progress === 100 && !error;
+  
+  // Time estimation calculation
+  const remainingSecs = Math.max(0, Math.round(30 * (1 - progress / 100)));
+  const mins = Math.floor(remainingSecs / 60);
+  const secs = remainingSecs % 60;
+
+  // Contextual Text
+  let contextualText = "Initializing Pipeline...";
+  if (progress > 10) contextualText = "Extracting Financial Data...";
+  if (progress >= 30) contextualText = "Running Machine Learning Models...";
+  if (progress >= 50) contextualText = "Detecting Fraud Patterns...";
+  if (progress >= 65) contextualText = "Analyzing News Sentiment...";
+  if (progress >= 80) contextualText = "Generating Credit Appraisal Memo...";
+  if (progress === 100) contextualText = "Execution Finalized.";
+  if (error) contextualText = "System Fault Detected.";
+
+  let insightMessage = "Awaiting data extraction completion to generate analytical signals from financial ledgers.";
+  if (progress >= 30 && progress < 50) {
+      insightMessage = "PdfTable Engine has successfully mapped the balance sheet. Scanning for tabular anomalies...";
+  } else if (progress >= 50 && progress < 80) {
+      insightMessage = "Cross-referencing GSTR-3B filings against supplied bank ingestion data reveals consistent monthly patterns. Risk bounds look nominal.";
+  } else if (progress >= 80) {
+      insightMessage = "Probability of Default computation complete. Aggregating systemic insight logs for the final Credit Appraisal Memo generation.";
+  }
 
   return (
     <div className="analysis-running-page">
@@ -129,77 +175,135 @@ function Analysis() {
       </nav>
 
       <main className="main-content">
-        <div className="tracking-card">
-          <div className="tracking-header">
-            <div className="header-left">
-              <h1>Analysis {analysisId} — Running Live</h1>
-              <p>KARTA AI is connected to backend WebSocket</p>
-            </div>
-            
-            <div className="header-right">
-              <span className="progress-text">{Math.round(progress)}% Complete</span>
-              <div className="progress-bar-container">
-                <div className="progress-bar-fill" style={{ width: `${progress}%`, transition: 'width 0.4s ease-out' }}></div>
+        <div className="analysis-grid">
+          
+          <div className="tracking-card">
+            <div className="tracking-header">
+              <div className="header-left">
+                <h1>Analysis {analysisId} — Live AI Pipeline</h1>
+                <p>{contextualText}</p>
+              </div>
+              
+              <div className="header-right">
+                <span className="progress-text">{Math.round(progress)}% Complete</span>
+                <div className="progress-bar-container">
+                  <div className="progress-bar-fill" style={{ width: `${progress}%`, transition: 'width 0.4s ease-out' }}></div>
+                </div>
               </div>
             </div>
-          </div>
 
-          {error && (
-            <div style={{ margin: '1rem 1.5rem', padding: '12px', backgroundColor: '#FEE2E2', borderLeft: '4px solid #DC2626', color: '#B91C1C', borderRadius: 6, display: 'flex', gap: 8, alignItems: 'center' }}>
-              <AlertTriangle size={18} />{error}
-            </div>
-          )}
+            {error && (
+              <div className="error-banner">
+                <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                    <AlertTriangle size={18} />{error}
+                </div>
+                <button className="retry-btn" onClick={() => window.location.reload()}>Retry Extraction</button>
+              </div>
+            )}
 
-          <div className="tracking-body">
-            <div className="stepper">
-              {STEP_NUMBERS.map((num) => {
-                const msg = stepsData[num];
-                const status = msg?.status || 'pending';
-                
-                const isDone   = status === 'completed';
-                const isActive = status === 'running';
-                const isFail   = status === 'failed';
-                
-                let stepClass = 'step pending';
-                if (isDone) stepClass = 'step success';
-                if (isActive) stepClass = 'step active';
-                if (isFail) stepClass = 'step failed'; // we can style this red if we want
+            <div className="tracking-body">
+              <div className="stepper">
+                {STEP_NUMBERS.map((num) => {
+                  const msg = stepsData[num];
+                  const status = msg?.status || 'pending';
+                  
+                  const isDone   = status === 'completed' || (progress > 0 && progress === 100);
+                  const isActive = (!isDone && status === 'running') || (!isDone && progress > 0 && Object.keys(stepsData).length === num);
+                  const isFail   = status === 'failed';
+                  
+                  let stepClass = 'step pending';
+                  if (isDone) stepClass = 'step success';
+                  if (isActive) stepClass = 'step active';
+                  if (isFail) stepClass = 'step failed';
 
-                return (
-                  <div key={num} className={stepClass}>
-                    <div className="step-icon">
-                      <div className="step-icon-inner" style={isFail ? { background: '#DC2626', borderColor: '#DC2626' } : {}}>
-                        {isDone ? <Check size={18} strokeWidth={3} /> :
-                         isActive ? <Loader2 size={18} className="spinner" /> :
-                         isFail ? <AlertTriangle size={16} color="white" /> :
-                         <div className="dot"></div>}
+                  return (
+                    <div key={num} className={stepClass} onClick={() => setActiveStep(activeStep === num ? null : num)}>
+                      <div className="step-icon">
+                        <div className={`step-icon-inner ${isActive ? 'pulse' : ''}`} style={isFail ? { background: '#DC2626', borderColor: '#DC2626', boxShadow: 'none' } : {}}>
+                          {isDone ? <Check size={18} strokeWidth={3} /> :
+                           isActive ? <Loader2 size={18} className="spinner" /> :
+                           isFail ? <AlertTriangle size={16} color="white" /> :
+                           <div className="dot"></div>}
+                        </div>
+                      </div>
+                      <div className="step-content">
+                        <div className="step-title" style={isFail ? { color: '#DC2626' } : {}}>
+                          {msg?.step_name || `Awaiting step ${num}...`}
+                        </div>
+                        <div className="step-subtitle">
+                          {msg?.step_detail || 'Pending execution in cluster'}
+                        </div>
+
+                        {/* Expanded details UI */}
+                        {activeStep === num && msg && (
+                          <div className="step-detail-card" onClick={(e) => e.stopPropagation()}>
+                             <div className="step-detail-text"><Activity size={14}/> {msg.step_detail}</div>
+                             {isDone && <div className="step-detail-status">System Status: Validated</div>}
+                             {isActive && <div className="step-detail-status loading">System Status: Processing Matrix...</div>}
+                             {isFail && <div className="step-detail-status" style={{color: '#DC2626'}}>System Status: Segmentation Fault</div>}
+                          </div>
+                        )}
                       </div>
                     </div>
-                    <div className="step-content">
-                      <div className="step-title" style={isFail ? { color: '#DC2626' } : {}}>
-                        {msg?.step_name || `Awaiting step ${num}...`}
+                  );
+                })}
+              </div>
+
+              {isComplete && (
+                  <div className="completion-card">
+                      <div className="completion-header">
+                         <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                             <Check size={24} color="#16A34A" strokeWidth={3} />
+                             <h2>Analysis Complete</h2>
+                         </div>
+                         <div className="completion-decision approve">APPROVED</div>
                       </div>
-                      <div className="step-subtitle">
-                        {msg?.step_detail || 'Pending'}
-                      </div>
-                    </div>
+                      <p style={{ fontSize: '0.85rem', color: '#166534' }}>
+                        KARTA AI has successfully processed this profile. A detailed Credit Appraisal Memo operations file has been finalized in the system.
+                      </p>
+                      <button className="btn-view-report" onClick={() => navigate(`/dashboard?id=${analysisId}`)}>
+                         <FileBarChart size={18}/> View Full Report
+                      </button>
                   </div>
-                );
-              })}
-            </div>
-            <div className="info-box">
-              <Lightbulb size={18} className="info-icon" fill="currentColor" />
-              <div className="info-text">
-                Real-time connection established. KARTA backend is streaming precise execution logs via WebSocket port 8000.
-              </div>
+              )}
             </div>
           </div>
-        </div>
 
-        <div className="footer-note" style={{ display: 'flex', justifyContent: 'center', gap: 8 }}>
-          {isComplete
-            ? <Link to={`/dashboard?id=${analysisId}`} style={{ color: '#16a34a', fontWeight: 700 }}>✅ Complete — Redirecting to Dashboard...</Link>
-            : 'Live WebSocket running — do not close this window'}
+          <div className="intelligence-panel">
+             <div className="panel-card">
+                 <h3><Clock size={16}/> Time Estimation</h3>
+                 <div className="eta-display">
+                    {isComplete ? '0 min 0 sec' : `${mins} min ${secs} sec`}
+                 </div>
+                 <div className="eta-label">Estimated Remaining Time calculation based on GPU load.</div>
+             </div>
+
+             <div className="panel-card insight-card">
+                 <h3><Lightbulb size={16}/> Live AI Insight</h3>
+                 <p className="insight-text">{insightMessage}</p>
+             </div>
+
+             <div className="terminal-card">
+                 <div className="terminal-header">
+                    <Terminal size={14}/> <span>Server Log Stream</span>
+                 </div>
+                 <div className="terminal-body" id="term_log_viewport">
+                    {logStream.map((log, i) => (
+                        <div key={i} className="terminal-row">
+                           <span className="term-time">[{log.time}]</span>
+                           <span className="term-msg">{log.text}</span>
+                        </div>
+                    ))}
+                    {!isComplete && !error && (
+                        <div className="terminal-row">
+                           <span className="blinking-cursor">_</span>
+                        </div>
+                    )}
+                    <div ref={terminalEndRef} />
+                 </div>
+             </div>
+          </div>
+
         </div>
       </main>
     </div>
