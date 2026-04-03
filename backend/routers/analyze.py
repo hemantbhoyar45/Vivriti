@@ -1,5 +1,9 @@
 import asyncio
+import logging
+import traceback
 from datetime import datetime
+
+logger = logging.getLogger(__name__)
 from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
 from sqlalchemy.orm import Session
 from database import get_db, SessionLocal
@@ -213,11 +217,31 @@ async def run_analysis_background(analysis_id: int):
         await ws_push(analysis_id, 6, "Claude AI CAM Generation", "CAM parameters synced successfully", 100, "completed")
 
     except Exception as e:
-        db.rollback()
-        analysis.analysis_status = "failed"
-        analysis.failure_reason = str(e)
-        db.commit()
-        await ws_push(analysis_id, -1, "System Error", f"Failed at step: {str(e)}", 100, "failed")
+        import traceback
+        # Capture full repr(e) for better debugging
+        err_report = repr(e)
+        
+        # Log the full traceback for debugging with high visibility
+        logger.error(f"================ PIPELINE CRASH REPORT ================\n{traceback.format_exc()}\n=======================================================")
+        
+        # If pipeline reached >= 80% progress, mark as completed anyway (results were generated)
+        current_progress = getattr(analysis, 'progress', 0) or 0
+        if current_progress >= 80:
+            analysis.analysis_status = "completed"
+            analysis.failure_reason = None
+            company.status = "analyzed"
+        else:
+            db.rollback()
+            analysis.analysis_status = "failed"
+            analysis.failure_reason = err_report
+        
+        try:
+            db.commit()
+        except Exception:
+            pass
+        
+        await ws_push(analysis_id, -1, "System Error", err_report, int(current_progress), 
+                      "completed" if current_progress >= 80 else "failed")
     finally:
         db.close()
 

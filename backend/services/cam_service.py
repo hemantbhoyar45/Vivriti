@@ -388,10 +388,11 @@ def generate_cam(analysis_data: dict, field_observations: str = "") -> dict:
             pythoncom.CoUninitialize()
         except Exception as e:
             logger.error(f"PDF Conversion failed: {e}")
-            raise Exception(f"Failed to convert Word document to PDF. Native MS Word COM interface error: {str(e)}")
+            # Do NOT raise here — allow the user to at least get the Word document
+            pdf_path = ""
     else:
-        # If we reach here, we can't make a PDF. Raise error.
-        raise Exception("PDF conversion engine (docx2pdf) failed to initialize. Ensure Microsoft Word is installed for native PDF synthesis on this host.")
+        logger.warning("PDF conversion engine (docx2pdf) not available. Synthesis will provide Word document only.")
+        pdf_path = ""
         
     end_time = time.time()
 

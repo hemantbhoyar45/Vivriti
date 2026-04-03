@@ -15,8 +15,14 @@ def get_analysis_results(analysis_id: int, db: Session = Depends(get_db)):
     if not analysis:
         raise HTTPException(status_code=404, detail="Analysis not found")
         
+    if analysis.analysis_status.lower() == "failed":
+        raise HTTPException(
+            status_code=400, 
+            detail=f"Analysis failed: {analysis.failure_reason or 'Unknown error. Check backend logs'}"
+        )
+        
     if analysis.analysis_status.lower() != "completed":
-        raise HTTPException(status_code=400, detail="Analysis is not yet completed")
+        raise HTTPException(status_code=400, detail="Analysis is still in progress. Please check back in a few seconds.")
         
     company = db.query(Company).filter(Company.id == analysis.company_id).first()
     if not company:
@@ -89,8 +95,14 @@ def get_shap_chart(analysis_id: int, db: Session = Depends(get_db)):
     if not analysis:
         raise HTTPException(status_code=404, detail="Analysis not found")
         
+    if analysis.analysis_status.lower() == "failed":
+        raise HTTPException(
+            status_code=400, 
+            detail=f"Analysis failed: {analysis.failure_reason or 'Unknown error. Check backend logs'}"
+        )
+        
     if analysis.analysis_status.lower() != "completed":
-        raise HTTPException(status_code=400, detail="Analysis is not yet completed")
+        raise HTTPException(status_code=400, detail="SHAP chart is not yet available as analysis is still in progress.")
         
     chart_path = analysis.shap_chart_path
     

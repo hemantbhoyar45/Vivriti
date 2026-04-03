@@ -60,6 +60,13 @@ app.include_router(health_live.router)    # Live health: GET /api/health/live an
 app.include_router(auth.router)
 app.include_router(draft.router)
 
+from fastapi.responses import RedirectResponse
+
+@app.get("/", include_in_schema=False)
+async def root():
+    """Redirect root to API documentation"""
+    return RedirectResponse(url="/docs")
+
 @app.get("/health")
 def health_check():
     return {"status": "ok", "version": "1.0.0"}
