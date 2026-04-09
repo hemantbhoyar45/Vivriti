@@ -4,6 +4,7 @@
 
 Your KARTA AI project has been successfully reorganized from a flat structure into a clean, scalable folder hierarchy with separate `frontend/` and `backend/` directories.
 so add new file.
+my project is
 ---
 
 ## What Changed
