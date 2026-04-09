@@ -19,3 +19,4 @@ echo ""
 
 cd "$FRONTEND_DIR"
 npm run dev
+npm run build
