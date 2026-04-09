@@ -4,6 +4,7 @@ import { Plus, AlertTriangle, Activity, Network, CalendarMinus, AlertCircle, Fil
 import { getFullResults, getSHAPChartUrl } from '../services/resultsApi';
 import { downloadCAM } from '../services/camApi';
 import { useApi, Skeleton, ErrorBanner } from '../services/useApi';
+import Chatbot from '../components/Chatbot';
 import './Dashboard.css';
 
 function colorByRisk(r: string) {
@@ -251,6 +252,7 @@ function Dashboard() {
           </button>
         </div>
       </div>
+      <Chatbot />
     </div>
   );
 }

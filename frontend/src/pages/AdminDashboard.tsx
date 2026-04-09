@@ -10,6 +10,7 @@ import { useAuth } from '../context/AuthContext';
 import './AdminDashboard.css';
 import HistoryPage from './History';
 import NewAnalysis from './NewAnalysis';
+import Chatbot from '../components/Chatbot';
 
 const ProfileSettings = ({ user }: { user: any }) => {
     const [name, setName] = useState(user?.name || '');
@@ -576,6 +577,7 @@ const AdminDashboard: React.FC = () => {
                     {renderContent()}
                 </div>
             </main>
+            <Chatbot />
         </div>
     );
 };

@@ -257,19 +257,86 @@ function NewAnalysis({ hideNavbar = false }: { hideNavbar?: boolean }) {
           <div className="sidebar-title">WHAT KARTA ANALYSES:</div>
           <div className="enhanced-features-list">
             {[
-              { title: 'Financial ratios and trends', desc: 'Analyzes revenue, profitability, and growth', icon: <TrendingUp size={18} />, color: '#4F46E5', bg: '#EEF2FF' },
-              { title: 'GST mismatch and fraud', desc: 'Detects anomalies and fraudulent transactions', icon: <AlertOctagon size={18} />, color: '#DC2626', bg: '#FEF2F2' },
-              { title: 'Promoter background check', desc: 'Evaluates credibility and past records', icon: <UserCheck size={18} />, color: '#059669', bg: '#ECFDF5' },
-              { title: 'News and market signals', desc: 'Uses AI to analyze sentiment from news', icon: <Newspaper size={18} />, color: '#D97706', bg: '#FFFBEB' },
-              { title: 'Sector-specific risk scoring', desc: 'Applies industry-based risk models', icon: <Briefcase size={18} />, color: '#7C3AED', bg: '#F5F3FF' }
+              {
+                title: 'Financial ratios and trends', desc: 'Analyzes revenue, profitability, and growth', icon: <TrendingUp size={18} />, color: '#4F46E5', bg: '#EEF2FF',
+                data: [
+                  { label: 'Revenue Growth', value: '12.5% YoY', highlight: true },
+                  { label: 'Net Profit Margin', value: '8.2%', highlight: false },
+                  { label: 'Debt-to-Equity', value: '1.4', highlight: false },
+                  { label: 'Operating Cash Flow', value: '₹2.3 Cr', highlight: false },
+                  { label: 'Trend', value: 'Stable growth', highlight: true, color: 'green' }
+                ]
+              },
+              {
+                title: 'GST mismatch and fraud', desc: 'Detects anomalies and fraudulent transactions', icon: <AlertOctagon size={18} />, color: '#DC2626', bg: '#FEF2F2',
+                data: [
+                  { label: 'Reported Sales', value: '₹5.8 Cr', highlight: false },
+                  { label: 'Bank Transactions', value: '₹6.5 Cr', highlight: false },
+                  { label: 'Mismatch', value: '₹0.7 Cr', highlight: true },
+                  { label: 'Suspicious Trans.', value: '14', highlight: true, color: 'red' },
+                  { label: 'Fraud Risk Level', value: 'Medium', highlight: true, color: 'yellow' }
+                ]
+              },
+              {
+                title: 'Promoter check', desc: 'Evaluates credibility and past records', icon: <UserCheck size={18} />, color: '#059669', bg: '#ECFDF5',
+                data: [
+                  { label: 'Name', value: 'Rahul Sharma', highlight: false },
+                  { label: 'Experience', value: '12+ years', highlight: false },
+                  { label: 'Prev. Companies', value: '3', highlight: false },
+                  { label: 'Legal Cases', value: 'None', highlight: true, color: 'green' },
+                  { label: 'Credibility Score', value: '82/100', highlight: true, color: 'green' }
+                ]
+              },
+              {
+                title: 'News and signals', desc: 'Uses AI to analyze sentiment from news', icon: <Newspaper size={18} />, color: '#D97706', bg: '#FFFBEB',
+                data: [
+                  { label: 'Sentiment', value: 'Neutral/Positive', highlight: false },
+                  { label: 'Ext. Risk Score', value: '0.28', highlight: true, color: 'green' },
+                  { label: 'News Alerts', value: '• Expanding ops\n• YoY growth', highlight: false }
+                ]
+              },
+              {
+                title: 'Sector risk scoring', desc: 'Applies industry-based risk models', icon: <Briefcase size={18} />, color: '#7C3AED', bg: '#F5F3FF',
+                data: [
+                  { label: 'Industry', value: 'Textile Mfg', highlight: false },
+                  { label: 'Sector Risk', value: 'Medium', highlight: true, color: 'yellow' },
+                  { label: 'Demand Trend', value: 'Increasing', highlight: true, color: 'green' },
+                  { label: 'Risk Score', value: '65/100', highlight: true, color: 'yellow' }
+                ]
+              }
             ].map((feat, i) => (
-              <div key={i} className="enhanced-feature-card" style={{ animationDelay: `${i * 0.1}s` }}>
-                <div className="enhanced-feature-icon" style={{ backgroundColor: feat.bg, color: feat.color }}>
-                  {feat.icon}
+              <div key={i} className="enhanced-feature-card" style={{ animationDelay: `${i * 0.1}s`, display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '10px' }}>
+                  <div className="enhanced-feature-icon" style={{ backgroundColor: feat.bg, color: feat.color }}>
+                    {feat.icon}
+                  </div>
+                  <div className="enhanced-feature-text">
+                    <div className="enhanced-feature-title">{feat.title}</div>
+                    <div className="enhanced-feature-desc">{feat.desc}</div>
+                  </div>
                 </div>
-                <div className="enhanced-feature-text">
-                  <div className="enhanced-feature-title">{feat.title}</div>
-                  <div className="enhanced-feature-desc">{feat.desc}</div>
+                <div style={{ paddingLeft: '6px', borderLeft: '2px solid rgba(0,0,0,0.06)', marginLeft: '16px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  {feat.data.map((item, idx) => {
+                     let valColor = '#334155';
+                     if (item.color === 'green') valColor = '#059669';
+                     if (item.color === 'yellow') valColor = '#D97706';
+                     if (item.color === 'red') valColor = '#DC2626';
+
+                     return (
+                       <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', alignItems: 'flex-start', gap: '4px' }}>
+                          <span style={{ color: '#64748B', whiteSpace: 'nowrap' }}>{item.label}:</span>
+                          <span style={{ 
+                              color: valColor, 
+                              fontWeight: item.highlight ? 700 : 500,
+                              textAlign: 'right',
+                              whiteSpace: 'pre-line',
+                              lineHeight: 1.2
+                          }}>
+                              {item.value}
+                          </span>
+                       </div>
+                     );
+                  })}
                 </div>
               </div>
             ))}
