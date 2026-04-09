@@ -23,6 +23,8 @@ npm-debug.log*
 # Editor
 .vscode/
 .DS_Store
+.env
 
 # DB
 karta.db
+
