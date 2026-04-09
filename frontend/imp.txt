@@ -1,0 +1,27 @@
+Admin Login 
+sys_admin@nbfc.com
+admin123
+
+so for now do one thing that 
+i am sharing you the data of the two company 
+Which One of them is Rewjected and Accepted
+So Rejected One 
+Account Holder: Shree Metalcast Industries Pvt. Ltd.
+Account No: 62184039217
+CIN NUMBER U27310MH2009PTC192841
+PAN NUMBER PAN: AAXCS8821K
+GSTIN NUMBER 27AAXCS8821K1ZM 
+
+admin123
+and for the accpeted 
+case 
+Account Holder: Bharat Precision Components Pvt. Ltd.
+Account No 38291047562
+CIN: U29299GJ2011PTC064872 PAN: AABCB1234M
+gstin number 24AABCB1234M1ZX
+
+so acc show accepted any reject acc to the data h i ahve provided to you when the user enter this data 
+so do this first
+
+
+
