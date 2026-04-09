@@ -1,4 +1,67 @@
 # ⚡ KARTA AI
+# 🚀 Project Title
+## KARTA – AI-Powered Credit Risk & Fraud Detection System
+
+---
+
+## 👥 Team Details
+- Team ID: TGP057  
+- Team Name: 100X  
+- Team Leader: Hemant Bhoyar  
+
+### 👨‍💻 Team Members:
+- Jayant Khedekar  
+- Vaibhav Sawarbandhe  
+- Ayush Jibhakate  
+- Aryan Ishwarkar  
+
+### 📞 Contact:
+- 9322477239  
+
+---
+
+## 💡 Problem Statement
+
+India loses ₹100 Crore daily to bad loans — not due to lack of data, but due to lack of intelligence to detect fraud and make informed credit decisions.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend:** React.js  
+- **Backend:** FastAPI (Python)  
+- **Database:** ChromaDB / MongoDB  
+
+---
+
+## ⚙️ Features
+
+- 📄 **Smart Document Processing (OCR):** Extracts financial data from PDFs and images  
+- 🔍 **Fraud Detection Engine:** Detects circular trading, GST mismatch, and suspicious transactions  
+- 📊 **AI-Based Risk Scoring:** Predicts loan default probability using ML models  
+- 🧠 **Explainable AI (SHAP):** Shows reasons behind risk prediction  
+- 🚨 **Early Warning System:** Identifies potential defaults before they occur  
+- 📑 **Automated CAM Report:** Generates credit reports instantly  
+- 💬 **Chatbot Assistant:** Explains risk, fraud, and financial insights  
+- 🌐 **Multilingual Support:** English, Hindi, Marathi  
+
+---
+
+## ▶️ How to Run
+
+### 🔹 Step 1: Clone the Repository
+```bash
+git clone <hemantbhoyar45/TGP057>
+cd your-project-folder
+
+cd frontend
+npm install
+npm start
+
+cd backend
+pip install -r requirements.txt
+uvicorn main:app --reload
+
 
 sign in -
 email - admin@gmail.com
