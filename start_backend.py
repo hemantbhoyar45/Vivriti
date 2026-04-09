@@ -8,9 +8,9 @@ import subprocess
 backend_dir = os.path.join(os.path.dirname(__file__), "backend")
 
 # Start the backend
-print("=" * 60)
+print("=" * 70)
 print("Starting KARTA Backend (FastAPI)")
-print("=" * 60)
+print("=" * 70)
 print(f"Backend directory: {backend_dir}")
 print(f"API will be available at: http://localhost:8000")
 print(f"API Docs: http://localhost:8000/docs")

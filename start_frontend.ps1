@@ -15,3 +15,4 @@ Write-Host ""
 
 Set-Location $FrontendDir
 npm run dev
+npm run build
