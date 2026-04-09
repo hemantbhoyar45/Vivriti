@@ -1,5 +1,9 @@
 # ⚡ KARTA AI
 
+sign in -
+email - admin@gmail.com
+password - admin@123
+
 **India's First RBI-Compliant AI Credit Intelligence Platform**
 
 KARTA AI is a powerful, automated credit appraisal engine built for the Indian mid-market lending sector. It ingests complex, messy financial documents, detects fraud, evaluates risk, and automatically writes the full Credit Appraisal Memo (CAM) natively. It takes subjective, unorganized MSME data and turns it into concrete, explainable lending decisions.
