@@ -5,7 +5,6 @@ import { getFullResults, getSHAPChartUrl } from '../services/resultsApi';
 import { downloadCAM } from '../services/camApi';
 import { useApi, Skeleton, ErrorBanner } from '../services/useApi';
 import './Dashboard.css';
-import Chatbot from '../components/Chatbot';
 
 function colorByRisk(r: string) {
   const u = (r || '').toUpperCase();
@@ -252,7 +251,6 @@ function Dashboard() {
           </button>
         </div>
       </div>
-      <Chatbot data={data} />
     </div>
   );
 }
