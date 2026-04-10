@@ -109,7 +109,7 @@ KARTA AI is a powerful, automated credit appraisal engine built for the Indian m
 - **LangChain**: AI orchestration framework to chain together multi-step prompt workflows when reasoning about complex credit structures.
 - **FinBERT**: Financial sentiment analysis against live news streams to flag macro-economic risks for a specific borrower.
 - **ChromaDB**: A vector database implementation used underneath RAG (Retrieval-Augmented Generation) routines to query large textual audit reports instantly.
-- **NetworkX**: Employed for advanced graph analysis to detect circular transactions, shell company links, and hidden related-party fraud patterns.
+- **NetworkX**: Employed for advanced graph analysis to detect circular transactions, shell company links, and hidden related-party fraud patterns. and recorgtion.
 
 ---
 
