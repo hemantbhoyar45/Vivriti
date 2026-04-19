@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const ADMIN_EMAIL = 'admin@gmail.com';
-const ADMIN_PASSWORD = 'admin@12345';
+const ADMIN_PASSWORD = 'admin123';
 
 const AuthContext = createContext<any>(null);
 
