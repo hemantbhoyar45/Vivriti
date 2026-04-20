@@ -53,8 +53,7 @@ def health_check():
 try:
     print("Attempting to load Heavy Dependencies (Bypassed for Debug)...")
 
-    # === STEP A: Database Connections (Disabled) ===
-    """
+    # === STEP A: Database Connections ===
     from database import engine, Base, SessionLocal, get_db
     from sqlalchemy.orm import Session
     from utils.demo_data import load_demo_data, reset_demo_data
@@ -66,10 +65,8 @@ try:
         load_demo_data(db)
     finally:
         db.close()
-    """
 
-    # === STEP B: ML Services & Routers (Disabled) ===
-    """
+    # === STEP B: ML Services & Routers ===
     from routers import upload, analyze, fraud, scoring, cam, ews, health, ws, history, ews_ws, health_live, auth, draft
     
     app.include_router(upload.router, tags=["Upload"])
@@ -81,7 +78,9 @@ try:
     app.include_router(history.router, tags=["History"])
     app.include_router(ws.router)
     app.include_router(auth.router)
-    """
+    app.include_router(ews_ws.router)
+    app.include_router(health_live.router)
+    app.include_router(draft.router)
 
     print("Heavy components bypassed. Server ready to listen on $PORT.")
 

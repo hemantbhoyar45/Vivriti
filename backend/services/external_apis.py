@@ -294,15 +294,10 @@ def call_claude(system_prompt: str, user_prompt: str) -> str:
         raise ClaudeAPIError(str(e))
 
 # ==========================================
-# 7. FINBERT SENTIMENT (Loaded Once on Startup)
+# 7. FINBERT SENTIMENT (Bypassed for Render Deployment / Memory limits)
 # ==========================================
-try:
-    from transformers import pipeline
-    logger.info("Eager loading FinBERT to memory...")
-    _finbert_pipeline = pipeline("text-classification", model="yiyanghkust/finbert-tone", return_all_scores=True)
-except Exception as e:
-    logger.warning(f"FinBERT Load Failed at Startup: {e}")
-    _finbert_pipeline = "FAILED_LOAD"
+logger.info("Bypassing FinBERT eager loading to save RAM...")
+_finbert_pipeline = "FAILED_LOAD"
 
 def get_sentiment(text: str) -> dict:
     model = _finbert_pipeline
