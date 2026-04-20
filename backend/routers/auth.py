@@ -22,8 +22,8 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 @router.post("/login", response_model=Token)
 def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     # Predefined admin credentials for the prototype
-    ADMIN_EMAIL = "admin@karta.ai"
-    ADMIN_PASSWORD = "admin" # Simple password for prototype
+    ADMIN_EMAIL = "admin@gmail.com"
+    ADMIN_PASSWORD = "admin@123" # Simple password for prototype
     
     if form_data.username == ADMIN_EMAIL and form_data.password == ADMIN_PASSWORD:
         access_token = create_access_token(data={"sub": ADMIN_EMAIL})
@@ -52,9 +52,9 @@ def get_me(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
         raise HTTPException(status_code=401, detail="Invalid token")
     
 
-    if email == "admin@karta.ai":
+    if email == "admin@gmail.com":
         return {
-            "email": "admin@karta.ai",
+            "email": "admin@gmail.com",
             "full_name": "System Administrator",
             "id": 0
         }
