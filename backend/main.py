@@ -62,10 +62,9 @@ app.include_router(draft.router)
 
 from fastapi.responses import RedirectResponse
 
-@app.get("/", include_in_schema=False)
-async def root():
-    """Redirect root to API documentation"""
-    return RedirectResponse(url="/docs")
+@app.get("/")
+def root():
+    return {"status": "API is running"}
 
 @app.get("/health")
 def health_check():
