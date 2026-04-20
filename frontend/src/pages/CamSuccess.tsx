@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import {
   FileText, Loader2, Download, CheckCircle, Plus, Bell,
@@ -94,7 +94,7 @@ function CamSuccess() {
   const [observations, setObservations] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState('');
   const [camMeta, setCamMeta] = useState<any>(null);
-  const [generating, setGenerating] = useState(false);
+  const [, setGenerating] = useState(false);
   const [genError, setGenError] = useState('');
   const [genProgress, setGenProgress] = useState(0);
   const [genDetail, setGenDetail] = useState('');

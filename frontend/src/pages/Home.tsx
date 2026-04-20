@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Shield, Zap, TrendingUp, ArrowRight, PlayCircle,
   FileText, AlertTriangle, BarChart3, Newspaper, BookOpen,
@@ -20,7 +20,7 @@ function Home() {
   const { user, logout } = useAuth();
   const [activeSection, setActiveSection] = useState('');
   const [scrolled, setScrolled] = useState(false);
-  const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
+  // sectionRefs deleted due to TS error
 
   // Navbar shadow on scroll
   useEffect(() => {
