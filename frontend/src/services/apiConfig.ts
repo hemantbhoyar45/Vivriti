@@ -7,15 +7,15 @@ import axios from 'axios';
 
 export const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
-// WebSocket goes through the Vite proxy (same origin = port 5173 in dev)
-// so browsers don't block the cross-port WS upgrade handshake.
-const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-export const WS_URL = `${wsProtocol}//${window.location.host}`;
+// In production, the backend handles WS! We must swap http(s):// for ws(s)://
+const isHttps = BASE_URL.startsWith('https');
+const wsBase = BASE_URL.replace(/^https?:\/\//, isHttps ? 'wss://' : 'ws://');
+export const WS_URL = wsBase;
 
 // ─── Global Axios Instance ────────────────────────────────────────────────────
 const api = axios.create({
-  // Empty baseURL = relative paths → routed through Vite proxy → no CORS
-  baseURL: '',
+  // Point directly to backend URL
+  baseURL: import.meta.env.VITE_API_URL ? BASE_URL : '',
   timeout: 300000, // 5 minutes for heavy ML/analysis endpoints
   headers: { 'Accept': 'application/json' },
 });
