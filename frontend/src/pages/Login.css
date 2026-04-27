@@ -1,319 +1,500 @@
-/* Base Container */
-.login-container {
-    height: 100vh;
-    display: flex;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: linear-gradient(135deg, #f5f9ff 0%, #e6f0ff 100%);
-    overflow: hidden;
+/* ═══════════════════════════════════════════════════════════════
+   KARTA Login — Consistent with Home Design System
+   Fonts: Outfit (display) + Inter (body)
+═══════════════════════════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600&display=swap');
+
+/* ─── ROOT ────────────────────────────────────────────────────── */
+.kl-root {
+  --primary:       #1C335B;
+  --primary-light: #2563eb;
+  --primary-dark:  #0f1f3d;
+  --accent:        #6366f1;
+  --accent2:       #10b981;
+  --text-dark:     #0f172a;
+  --text-mid:      #334155;
+  --text-muted:    #64748b;
+  --text-faint:    #94a3b8;
+  --bg:            #ffffff;
+  --bg-alt:        #f8fafc;
+  --border:        #e2e8f0;
+  --border-mid:    #cbd5e1;
+
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* ──────────────────────────────────────────────────
-   LEFT VISUAL PANEL (40%)
-   ────────────────────────────────────────────────── */
-.login-visual-panel {
-    width: 40%;
-    background: #1F3663;
-    color: white;
-    padding: 3rem;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    overflow: hidden;
+/* ─── LEFT BRANDING PANEL ─────────────────────────────────────── */
+.kl-panel {
+  width: 42%;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(145deg, #0f1f3d 0%, #1C335B 45%, #1e3a8a 100%);
+  display: flex;
+  flex-direction: column;
 }
 
-.visual-content {
-    position: relative;
-    z-index: 10;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+/* Orb decorations */
+.kl-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(70px);
+}
+.kl-orb--1 {
+  width: 380px; height: 380px;
+  top: -100px; left: -80px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.35) 0%, transparent 70%);
+}
+.kl-orb--2 {
+  width: 320px; height: 320px;
+  bottom: -60px; right: -60px;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.22) 0%, transparent 70%);
 }
 
-.branding-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+/* Dot grid */
+.kl-grid {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 26px 26px;
+  mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 20%, rgba(0,0,0,0.4) 80%, transparent 100%);
+  pointer-events: none;
 }
 
-.logo-icon-light {
-    background: white;
-    color: #1F3663;
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    font-size: 1.25rem;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+.kl-panel__content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 2.5rem 3rem;
 }
 
-.branding-header h1 {
-    font-size: 1.5rem;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    margin: 0;
+/* Logo */
+.kl-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+  color: #fff;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 900;
+  font-size: 1.4rem;
+  letter-spacing: -0.04em;
+  width: fit-content;
 }
 
-.visual-main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    animation: fadeSlideUp 0.8s ease-out;
+.kl-logo__icon {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  padding: 7px;
+  border-radius: 9px;
+  display: flex;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
 }
 
-@keyframes fadeSlideUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+.kl-logo__text {
+  letter-spacing: -0.04em;
 }
 
-.visual-main h2 {
-    font-size: 2.25rem;
-    font-weight: 700;
-    line-height: 1.2;
-    margin-bottom: 1rem;
+/* Main block */
+.kl-panel__main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem 0;
 }
 
-.visual-main p {
-    font-size: 1rem;
-    color: #bfdbfe;
-    line-height: 1.6;
-    margin-bottom: 3rem;
-    max-width: 90%;
+.kl-panel__headline {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(2rem, 3.2vw, 2.8rem);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  color: #fff;
+  margin-bottom: 1.1rem;
 }
 
-.feature-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
+.kl-panel__headline--gradient {
+  background: linear-gradient(135deg, #93c5fd 0%, #a5b4fc 60%, #6ee7b7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.feature-item {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    font-size: 0.95rem;
-    font-weight: 500;
+.kl-panel__sub {
+  font-size: 0.96rem;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.65;
+  margin-bottom: 2.5rem;
+  max-width: 92%;
 }
 
-.feature-icon {
-    width: 32px;
-    height: 32px;
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
+/* Feature list */
+.kl-featurelist {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
 }
 
-.visual-footer {
-    font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.6);
-    font-weight: 500;
+.kl-featurelist__item {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.88);
 }
 
-/* Abstract Background Blobs - Hiding them to give the flat color look required */
-.blob {
-    display: none;
+.kl-featurelist__icon {
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(4px);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  flex-shrink: 0;
 }
 
-/* ──────────────────────────────────────────────────
-   RIGHT LOGIN PANEL (60%)
-   ────────────────────────────────────────────────── */
-.login-form-panel {
-    width: 60%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    position: relative;
+/* Stats */
+.kl-panel__stats {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(8px);
+  border-radius: 14px;
+  padding: 1rem 1.25rem;
+  width: fit-content;
+  gap: 0;
 }
 
-.back-link {
-    position: absolute;
-    top: 2.5rem;
-    right: 3rem;
+.kl-panel__stat {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0 1rem;
 }
 
-.back-link a {
-    color: #64748b;
-    text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 500;
-    transition: color 0.2s;
+.kl-panel__stat-div {
+  width: 1px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.18);
+  margin-right: 1rem;
 }
 
-.back-link a:hover {
-    color: #1e293b;
+.kl-panel__stat-val {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -0.03em;
+  line-height: 1;
 }
 
-.login-card {
-    background: white;
-    border-radius: 16px;
-    padding: 3rem;
-    width: 100%;
-    max-width: 420px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    animation: scaleFadeIn 0.5s ease-out;
+.kl-panel__stat-lbl {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.55);
+  font-weight: 500;
+  line-height: 1.2;
 }
 
-@keyframes scaleFadeIn {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
+/* Panel footer */
+.kl-panel__footer {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.45);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 
-.login-header {
-    text-align: center;
-    margin-bottom: 2rem;
+/* ─── RIGHT FORM SIDE ─────────────────────────────────────────── */
+.kl-form-side {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background: radial-gradient(ellipse 70% 60% at 60% 30%, rgba(37, 99, 235, 0.06) 0%, transparent 70%),
+              var(--bg-alt);
+  padding: 3rem 2rem;
 }
 
-.login-header h2 {
-    color: #1e293b;
-    font-size: 1.75rem;
-    font-weight: 800;
-    margin-bottom: 0.5rem;
+/* Back link */
+.kl-back {
+  position: absolute;
+  top: 1.8rem;
+  left: 2.5rem;
 }
 
-.login-header .subtitle {
-    color: #64748b;
-    font-size: 0.9rem;
-    margin: 0;
+.kl-back__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.84rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.2s, gap 0.2s;
+}
+.kl-back__link:hover {
+  color: var(--primary);
+  gap: 0.6rem;
 }
 
-.error-message {
-    background-color: #fef2f2;
-    color: #ef4444;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #fca5a5;
-    margin-bottom: 1.5rem;
-    font-size: 0.85rem;
-    font-weight: 500;
-    text-align: center;
+/* ─── CARD ────────────────────────────────────────────────────── */
+.kl-card {
+  width: 100%;
+  max-width: 420px;
+  background: #fff;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 40px rgba(28, 51, 91, 0.1), 0 2px 12px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  position: relative;
 }
 
-.input-group {
-    margin-bottom: 1.25rem;
+/* Coloured top-bar accent */
+.kl-card__accent {
+  height: 4px;
+  background: linear-gradient(90deg, #1C335B 0%, #2563eb 50%, #6366f1 100%);
 }
 
-.input-group label {
-    display: block;
-    margin-bottom: 0.4rem;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #64748b;
+/* Card inner padding */
+.kl-card__header,
+.kl-form,
+.kl-card__note {
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
 }
 
-.input-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
+.kl-card__header {
+  padding-top: 2.25rem;
+  padding-bottom: 1.5rem;
+  text-align: center;
 }
 
-.input-icon {
-    position: absolute;
-    left: 14px;
-    color: #94a3b8;
-    pointer-events: none;
-    transition: color 0.2s;
+.kl-card__logo-ring {
+  width: 52px;
+  height: 52px;
+  background: linear-gradient(135deg, #1C335B, #2563eb);
+  color: #fff;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.2rem;
+  box-shadow: 0 6px 20px rgba(28, 51, 91, 0.35);
 }
 
-.input-wrapper input {
-    width: 100%;
-    padding: 12px 14px 12px 42px; /* left padding for icon */
-    border-radius: 10px;
-    border: 1px solid #dbeafe;
-    background-color: white;
-    color: #0f172a;
-    font-size: 0.95rem;
-    font-family: inherit;
-    transition: all 0.2s;
+.kl-card__title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.65rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text-dark);
+  margin: 0 0 0.35rem;
 }
 
-.input-wrapper input:focus {
-    outline: none;
-    border-color: #1F3663;
-    box-shadow: 0 0 0 3px rgba(31, 54, 99, 0.15);
+.kl-card__subtitle {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin: 0;
 }
 
-.input-wrapper input:focus ~ .input-icon {
-    color: #1F3663;
+/* Error banner */
+.kl-error {
+  margin: 0 2.5rem 1.25rem;
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fca5a5;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  font-size: 0.845rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow: hidden;
 }
 
-.password-toggle {
-    position: absolute;
-    right: 12px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #94a3b8;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2px;
+/* Form */
+.kl-form {
+  padding-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
 }
 
-.password-toggle:hover {
-    color: #475569;
+.kl-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
 }
 
-.login-btn {
-    width: 100%;
-    padding: 14px;
-    background: #1F3663;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    margin-top: 1rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.3s ease;
+.kl-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-mid);
+  letter-spacing: 0.01em;
 }
 
-.login-btn:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(31, 54, 99, 0.3);
-    background: #16294D;
+/* Input wrapper */
+.kl-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 1.5px solid var(--border);
+  border-radius: 11px;
+  background: var(--bg);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  overflow: hidden;
 }
 
-.login-btn:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
+.kl-input-wrap--focused {
+  border-color: var(--primary-light);
+  box-shadow: 0 0 0 3.5px rgba(37, 99, 235, 0.14);
 }
 
-.spinner {
-    animation: spin 1s linear infinite;
+.kl-input-icon {
+  position: absolute;
+  left: 13px;
+  color: var(--text-faint);
+  pointer-events: none;
+  transition: color 0.2s;
+  flex-shrink: 0;
+}
+.kl-input-wrap--focused .kl-input-icon {
+  color: var(--primary-light);
 }
 
-@keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+.kl-input {
+  width: 100%;
+  padding: 13px 14px 13px 42px;
+  border: none;
+  background: transparent;
+  color: var(--text-dark);
+  font-size: 0.94rem;
+  font-family: 'Inter', sans-serif;
+  outline: none;
+  transition: background 0.2s;
+}
+.kl-input::placeholder { color: var(--text-faint); }
+.kl-input--password { padding-right: 44px; }
+
+/* Eye toggle */
+.kl-eye-btn {
+  position: absolute;
+  right: 11px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-faint);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px;
+  border-radius: 6px;
+  transition: color 0.18s, background 0.18s;
+}
+.kl-eye-btn:hover {
+  color: var(--text-mid);
+  background: var(--bg-alt);
 }
 
-/* ──────────────────────────────────────────────────
-   RESPONSIVENESS (MOBILE)
-   ────────────────────────────────────────────────── */
-@media (max-width: 900px) {
-    .login-visual-panel {
-        display: none;
-    }
-    .login-form-panel {
-        width: 100%;
-        padding: 1.5rem;
-    }
-    .back-link {
-        top: 1.5rem;
-        right: 1.5rem;
-    }
-    .login-card {
-        padding: 2.5rem 2rem;
-    }
+/* Submit button */
+.kl-submit-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #1C335B 0%, #2563eb 100%);
+  color: #fff;
+  border: none;
+  border-radius: 11px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 5px 18px rgba(28, 51, 91, 0.38);
+  transition: box-shadow 0.2s, opacity 0.2s;
+  margin-top: 0.3rem;
+}
+.kl-submit-btn:disabled {
+  opacity: 0.72;
+  cursor: not-allowed;
+}
+
+/* Card note */
+.kl-card__note {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-faint);
+  padding-bottom: 2rem;
+  margin: 0;
+}
+
+/* ─── BOTTOM RIBBON ───────────────────────────────────────────── */
+.kl-ribbon {
+  position: absolute;
+  bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.kl-ribbon__pill {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-faint);
+  letter-spacing: 0.04em;
+}
+
+.kl-ribbon__sep {
+  margin-right: 0.25rem;
+  opacity: 0.5;
+}
+
+/* ─── RESPONSIVE ──────────────────────────────────────────────── */
+@media (max-width: 860px) {
+  .kl-panel { display: none; }
+  .kl-form-side {
+    background: radial-gradient(ellipse 80% 60% at 50% 20%, rgba(37, 99, 235, 0.07) 0%, transparent 70%),
+                var(--bg-alt);
+    padding: 2rem 1.25rem 5rem;
+  }
+  .kl-back { left: 1.5rem; top: 1.5rem; }
+}
+
+@media (max-width: 480px) {
+  .kl-card__header,
+  .kl-form,
+  .kl-card__note { padding-left: 1.5rem; padding-right: 1.5rem; }
+  .kl-error { margin-left: 1.5rem; margin-right: 1.5rem; }
+  .kl-card__title { font-size: 1.4rem; }
+  .kl-panel__stats { flex-direction: column; gap: 0.75rem; padding: 0.85rem 1rem; }
+  .kl-panel__stat-div { display: none; }
 }

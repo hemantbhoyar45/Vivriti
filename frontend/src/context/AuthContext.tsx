@@ -11,10 +11,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     // Restore session from localStorage on page refresh
-    const storedUser = localStorage.getItem('admin_user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    console.log("AuthProvider mounted");
+    try {
+      const storedUser = localStorage.getItem('admin_user');
+      console.log("Stored user found:", !!storedUser);
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      }
+    } catch (e) {
+      console.error("Failed to parse stored user", e);
+      localStorage.removeItem('admin_user');
     }
+    console.log("Setting loading to false");
     setLoading(false);
   }, []);
 

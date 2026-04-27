@@ -4,22 +4,6 @@
 
 ---
 
-## 👥 Team Details
-- Team ID: TGP057  
-- Team Name: 100X  
-- Team Leader: Hemant Bhoyar  
-
-### 👨‍💻 Team Members:
-- Jayant Khedekar  
-- Vaibhav Sawarbandhe  
-- Ayush Jibhakate  
-- Aryan Ishwarkar  
-
-### 📞 Contact:
-- 9322477239  
-
----
-
 ## 💡 Problem Statement
 
 India loses ₹100 Crore daily to bad loans — not due to lack of data, but due to lack of intelligence to detect fraud and make informed credit decisions.
@@ -59,7 +43,8 @@ npm install
 npm start
 
 cd backend
-pip install -r requirements.txt
+python start_backend.p
+# pip install -r requirements.txt
 uvicorn main:app --reload
 
 
