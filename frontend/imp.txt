@@ -19,6 +19,8 @@ Create a structured dataset (JSON or JS object) with the following companies:
   Risk: LOW
   Reason: Strong financial stability, consistent transactions, no fraud signals
 
+so add this featuire as well ok
+
 * **Rejected Case (Tech Mahindra):**
   Name: Tech Mahindra Limited
   Account No: 58923104765
