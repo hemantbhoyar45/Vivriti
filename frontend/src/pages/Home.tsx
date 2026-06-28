@@ -13,25 +13,25 @@ import FeatureCards from '../components/FeatureCards';
 import './Home.css';
 
 const NAV_ITEMS = [
-  { id: 'product',         label: 'Product'  },
-  { id: 'features',        label: 'Features' },
-  { id: 'research',        label: 'Research' },
-  { id: 'pricing',         label: 'Pricing'  },
-  { id: 'history-section', label: 'History'  },
+  { id: 'product', label: 'Product' },
+  { id: 'features', label: 'Features' },
+  { id: 'research', label: 'Research' },
+  { id: 'pricing', label: 'Pricing' },
+  { id: 'history-section', label: 'History' },
 ];
 
-const fadeUp = (delay = 0) => ({
-  hidden:  { opacity: 0, y: 24 },
+const fadeUp = (delay = 0): any => ({
+  hidden: { opacity: 0, y: 24 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.65, ease: [0.16, 1, 0.3, 1], delay } },
 });
 
-const stagger = {
-  hidden:  {},
+const stagger: any = {
+  hidden: {},
   visible: { transition: { staggerChildren: 0.09 } },
 };
 
-const cardReveal = {
-  hidden:  { opacity: 0, y: 28 },
+const cardReveal: any = {
+  hidden: { opacity: 0, y: 28 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] } },
 };
 

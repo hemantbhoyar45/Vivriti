@@ -9,18 +9,18 @@ import { motion, AnimatePresence } from 'framer-motion';
 import './Login.css';
 
 /* ─── animation variants ──────────────────────────────────────── */
-const panelVariants = {
-  hidden:  { opacity: 0, x: -40 },
+const panelVariants: any = {
+  hidden: { opacity: 0, x: -40 },
   visible: { opacity: 1, x: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } },
 };
 
-const cardVariants = {
-  hidden:  { opacity: 0, y: 32, scale: 0.97 },
+const cardVariants: any = {
+  hidden: { opacity: 0, y: 32, scale: 0.97 },
   visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.08 } },
 };
 
-const itemVariants = {
-  hidden:  { opacity: 0, y: 16 },
+const itemVariants: any = {
+  hidden: { opacity: 0, y: 16 },
   visible: (i: number) => ({
     opacity: 1, y: 0,
     transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.15 + i * 0.07 },
@@ -28,28 +28,28 @@ const itemVariants = {
 };
 
 const FEATURES = [
-  { icon: <Zap size={17} />,         label: 'Real-time AI credit analysis & scoring'   },
-  { icon: <ShieldCheck size={17} />, label: 'Automated fraud detection engine'           },
-  { icon: <Activity size={17} />,    label: 'Deep financial insights & CAM generation'  },
+  { icon: <Zap size={17} />, label: 'Real-time AI credit analysis & scoring' },
+  { icon: <ShieldCheck size={17} />, label: 'Automated fraud detection engine' },
+  { icon: <Activity size={17} />, label: 'Deep financial insights & CAM generation' },
 ];
 
 /* ─── STATS BAR ───────────────────────────────────────────────── */
 const STATS = [
-  { value: '2 hrs',  label: 'CAM Speed' },
-  { value: '94%+',   label: 'Fraud Rate' },
-  { value: '8,400+', label: 'Analysed'  },
+  { value: '2 hrs', label: 'CAM Speed' },
+  { value: '94%+', label: 'Fraud Rate' },
+  { value: '8,400+', label: 'Analysed' },
 ];
 
 /* ═══════════════════════════════════════════════════════════════ */
 const Login: React.FC = () => {
-  const [email,        setEmail]        = useState('');
-  const [password,     setPassword]     = useState('');
-  const [error,        setError]        = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [focusedField, setFocusedField] = useState<'email' | 'password' | null>(null);
   const { login } = useAuth();
-  const navigate  = useNavigate();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -274,7 +274,7 @@ const Login: React.FC = () => {
                 className="kl-submit-btn"
                 disabled={isSubmitting}
                 whileHover={isSubmitting ? {} : { scale: 1.02, y: -2 }}
-                whileTap={isSubmitting ? {}  : { scale: 0.98 }}
+                whileTap={isSubmitting ? {} : { scale: 0.98 }}
                 transition={{ type: 'spring', stiffness: 340, damping: 22 }}
               >
                 {isSubmitting ? (
