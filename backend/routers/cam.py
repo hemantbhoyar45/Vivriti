@@ -125,8 +125,40 @@ async def generate_cam_document(analysis_id: int, body: CAMRequest = CAMRequest(
 def download_cam(
     analysis_id: int, 
     format: str = Query(..., description="Document format: 'word' or 'pdf'"),
+    demo: str = Query(None, description="Demo Account No or PAN"),
     db: Session = Depends(get_db)
 ):
+    import glob
+
+    if demo:
+        company_name = ""
+        if demo in ['AAACB1234M', '45678219304']:
+            company_name = "Tata_Consultancy_Services_Limited"
+        elif demo in ['AAACM5678L', '58923104765']:
+            company_name = "Tech_Mahindra_Limited"
+        elif demo in ['AAACI6789N', '67289103452']:
+            company_name = "Infosys_Limited"
+            
+        if company_name:
+            ext = ".docx" if format.lower() == "word" else ".pdf"
+            media_type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document" if ext == ".docx" else "application/pdf"
+            pattern = f"docs/KARTA_CAM_{company_name}_*{ext}"
+            files = glob.glob(pattern)
+            if not files:
+                pattern2 = f"docs/KARTA_CAM__{company_name}_*{ext}"
+                files = glob.glob(pattern2)
+                
+            if files:
+                files.sort(key=os.path.getmtime, reverse=True)
+                file_path = files[0]
+                filename = os.path.basename(file_path)
+                return FileResponse(
+                    path=file_path, 
+                    media_type=media_type, 
+                    filename=filename,
+                    headers={"Content-Disposition": f"attachment; filename={filename}"}
+                )
+
     analysis = db.query(Analysis).filter(Analysis.id == analysis_id).first()
     if not analysis:
         raise HTTPException(status_code=404, detail="Analysis not found")

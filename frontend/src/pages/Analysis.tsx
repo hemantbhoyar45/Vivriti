@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { Building2, Check, Loader2, Lightbulb, AlertTriangle, Terminal, Clock, FileBarChart, Activity } from 'lucide-react';
+import { Building2, Check, Loader2, Lightbulb, AlertTriangle, Terminal, Clock, FileBarChart, Activity, CheckCircle2 } from 'lucide-react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { connectAnalysisWebSocket, type WSMessage } from '../services/analysisApi';
 import './Analysis.css';
@@ -22,6 +22,24 @@ function Analysis() {
   const [activeStep, setActiveStep] = useState<number | null>(null);
   const [logStream, setLogStream] = useState<{time: string, text: string}[]>([]);
   
+  // Demo Integration States
+  const [showDemoModal, setShowDemoModal] = useState(false);
+  const [demoInput, setDemoInput] = useState('');
+  const [demoError, setDemoError] = useState('');
+
+  const handleVerifyAndView = () => {
+    const input = demoInput.trim().toUpperCase();
+    const validInputs = ['AAACB1234M', '45678219304', 'AAACM5678L', '58923104765', 'AAACI6789N', '67289103452'];
+    
+    if (validInputs.includes(input)) {
+      setDemoError('');
+      setShowDemoModal(false);
+      navigate(`/dashboard?id=${analysisId}&demo=${input}`);
+    } else {
+      setDemoError('No matching company data found. Please verify details.');
+    }
+  };
+
   const wsCleanupRef = useRef<(() => void) | null>(null);
   const terminalEndRef = useRef<HTMLDivElement>(null);
 
@@ -275,12 +293,11 @@ function Analysis() {
                              <Check size={24} color="#16A34A" strokeWidth={3} />
                              <h2>Analysis Complete</h2>
                          </div>
-                         <div className="completion-decision approve">APPROVED</div>
                       </div>
                       <p style={{ fontSize: '0.85rem', color: '#166534' }}>
                         KARTA AI has successfully processed this profile. A detailed Credit Appraisal Memo operations file has been finalized in the system.
                       </p>
-                      <button className="btn-view-report" onClick={() => navigate(`/dashboard?id=${analysisId}`)}>
+                      <button className="btn-view-report" onClick={() => setShowDemoModal(true)}>
                          <FileBarChart size={18}/> View Full Report
                       </button>
                   </div>
@@ -325,6 +342,33 @@ function Analysis() {
 
         </div>
       </main>
+
+      {/* View Report Demo Modal */}
+      {showDemoModal && (
+        <div className="demo-modal-overlay" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, backdropFilter: 'blur(2px)' }}>
+          <div className="demo-modal" style={{ background: '#fff', padding: '2rem', borderRadius: '12px', width: '400px', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)' }}>
+            <h3 style={{ color: '#1E3A8A', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '8px' }}><CheckCircle2 size={20} /> Verify Profile</h3>
+            <p style={{ fontSize: '0.85rem', color: '#64748B', marginBottom: '1.5rem', lineHeight: 1.5 }}>Enter the Account Number or PAN of the company to unlock and decrypt the final Credit Appraisal Memo.</p>
+            
+            <input 
+              type="text" 
+              placeholder="e.g. AAACB1234M or 45678219304" 
+              value={demoInput}
+              onChange={(e) => setDemoInput(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleVerifyAndView()}
+              style={{ width: '100%', padding: '12px', borderRadius: '6px', border: '1px solid #CBD5E1', marginBottom: '1rem', fontSize: '0.95rem' }}
+              autoFocus
+            />
+            
+            {demoError && <div style={{ color: '#DC2626', fontSize: '0.85rem', marginBottom: '1rem', display: 'flex', gap: '6px', alignItems: 'flex-start' }}><AlertTriangle size={14} style={{marginTop: '2px', flexShrink: 0}} /> {demoError}</div>}
+            
+            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end', marginTop: '1.5rem' }}>
+              <button onClick={() => setShowDemoModal(false)} style={{ padding: '10px 16px', background: 'transparent', border: 'none', color: '#64748B', cursor: 'pointer', fontWeight: 600 }}>Cancel</button>
+              <button onClick={handleVerifyAndView} style={{ padding: '10px 20px', background: '#1C335B', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 600, display: 'flex', gap: '6px', alignItems: 'center' }}><FileBarChart size={16} /> View Report</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

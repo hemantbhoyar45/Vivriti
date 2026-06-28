@@ -18,10 +18,59 @@ function crore(n: number) { return (n / 10000000).toFixed(1); }
 function Dashboard() {
   const [searchParams] = useSearchParams();
   const analysisId = Number(searchParams.get('id') || '1');
+  const demoParam = searchParams.get('demo');
   const [imgLoaded, setImgLoaded] = useState(false);
   const [imgError, setImgError] = useState(false);
 
-  const { data, loading, error, refetch } = useApi(() => getFullResults(analysisId), [analysisId]);
+  const apiResult = useApi(() => getFullResults(analysisId), [analysisId]);
+  let { data, loading, error: errorMsg } = apiResult;
+
+  if (demoParam) {
+    const input = demoParam.trim().toUpperCase();
+    const tcs = ['AAACB1234M', '45678219304'];
+    const techm = ['AAACM5678L', '58923104765'];
+    const infosys = ['AAACI6789N', '67289103452'];
+
+    let mockData = null;
+    if (tcs.includes(input)) {
+      mockData = {
+        company: { company_name: 'Tata Consultancy Services Limited', cin_number: 'U22210MH1995PLC084781', pan_number: 'AAACB1234M' },
+        decision: { decision: 'APPROVE', probability_of_default: 12.5, recommended_loan_amount: 30000000, recommended_interest_rate: 10.5, data_quality_score: 95 },
+        fraud: { overall_fraud_risk: 'LOW', total_signals_found: 0, signals: [] },
+        news: { news_risk_score: 15, top_signals: [] },
+        recommendation: { decision_reasoning: 'Strong financial stability, consistent transactions, no fraud signals.', conditions: [], interest_rate_breakdown: 'Base 8% + Risk Premium 2.5%' },
+        shap: { base_risk: 15, final_pd: 12.5, shap_factors: [{ name: 'Stable Cash Flow', impact: '-1.5' }, { name: 'High Revenue Growth', impact: '-1.0' }] }
+      };
+    } else if (techm.includes(input)) {
+      mockData = {
+        company: { company_name: 'Tech Mahindra Limited', cin_number: 'U72100MH1986PLC041370', pan_number: 'AAACM5678L' },
+        decision: { decision: 'REJECT', probability_of_default: 85.2, recommended_loan_amount: 0, recommended_interest_rate: 0, data_quality_score: 88 },
+        fraud: { overall_fraud_risk: 'HIGH', total_signals_found: 3, signals: [{ description: 'Suspicious transactions', confidence_score: 92 }, { description: 'GST mismatch', confidence_score: 85 }, { description: 'High liabilities', confidence_score: 78 }] },
+        news: { news_risk_score: 80, top_signals: [{ risk: 'HIGH', signal: 'Negative market sentiment' }] },
+        recommendation: { decision_reasoning: 'Suspicious transactions, GST mismatch, high liabilities.', conditions: [], interest_rate_breakdown: 'N/A' },
+        shap: { base_risk: 15, final_pd: 85.2, shap_factors: [{ name: 'GST Mismatch', impact: '+40.5' }, { name: 'Suspicious Transactions', impact: '+29.7' }] }
+      };
+    } else if (infosys.includes(input)) {
+      mockData = {
+        company: { company_name: 'Infosys Limited', cin_number: 'L85110KA1981PLC013115', pan_number: 'AAACI6789N' },
+        decision: { decision: 'CONDITIONAL', probability_of_default: 25.4, recommended_loan_amount: 20000000, recommended_interest_rate: 12.5, data_quality_score: 90 },
+        fraud: { overall_fraud_risk: 'MEDIUM', total_signals_found: 1, signals: [{ description: 'Moderate cash flow risk', confidence_score: 65 }] },
+        news: { news_risk_score: 40, top_signals: [] },
+        recommendation: { decision_reasoning: 'Requires verification, moderate cash flow risk, manual review needed.', conditions: ['Submit updated bank statement', 'Manual verification of liabilities'], interest_rate_breakdown: 'Base 8% + Risk Premium 4.5%' },
+        shap: { base_risk: 15, final_pd: 25.4, shap_factors: [{ name: 'Moderate Cash Flow Risk', impact: '+10.4' }] }
+      };
+    }
+
+    if (mockData) {
+      data = mockData;
+      loading = false;
+      errorMsg = null;
+    } else {
+      loading = false;
+      data = null;
+      errorMsg = 'No matching company data found. Please verify details.';
+    }
+  }
 
   if (loading) return (
     <div style={{ padding: '2rem' }}>
@@ -36,9 +85,9 @@ function Dashboard() {
     </div>
   );
 
-  if (error || !data) return (
+  if (errorMsg || !data) return (
     <div style={{ padding: '3rem' }}>
-      <ErrorBanner message={error || 'No data found.'} onRetry={refetch} />
+      <ErrorBanner message={errorMsg || 'No data found.'} onRetry={apiResult.refetch} />
       <div style={{ textAlign: 'center' }}>
         <Link to="/new-analysis" style={{ color: '#1C335B' }}>← Start New Analysis</Link>
       </div>
@@ -247,7 +296,7 @@ function Dashboard() {
           <Link to={`/warning-system?company_id=${data.company.cin_number ? '1' : '1'}&id=${analysisId}`} className="btn-action" style={{ textDecoration: 'none', background: '#1C335B', color: 'white', display: 'flex', alignItems: 'center', gap: 8, padding: '12px 20px', borderRadius: 8 }}>
             <AlertTriangle size={20} /> EWS Monitor
           </Link>
-          <button onClick={() => downloadCAM(analysisId, 'pdf')} className="btn-action btn-download" style={{ border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
+          <button onClick={() => downloadCAM(analysisId, 'pdf', demoParam)} className="btn-action btn-download" style={{ border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
             <FileText size={20} /> Download CAM Report
           </button>
         </div>

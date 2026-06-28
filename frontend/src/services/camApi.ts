@@ -45,8 +45,11 @@ export async function getCAMPreview(analysisId: number): Promise<CAMPreview> {
  * Opens the download URL in a hidden anchor tag.
  * format: 'word' | 'pdf'
  */
-export function downloadCAM(analysisId: number, format: 'word' | 'pdf'): void {
-  const url = `${window.location.origin}/api/cam/download/${analysisId}?format=${format}`;
+export function downloadCAM(analysisId: number, format: 'word' | 'pdf', demo?: string | null): void {
+  let url = `${window.location.origin}/api/cam/download/${analysisId}?format=${format}`;
+  if (demo) {
+    url += `&demo=${demo}`;
+  }
   const a = document.createElement('a');
   a.href = url;
   a.target = '_blank';

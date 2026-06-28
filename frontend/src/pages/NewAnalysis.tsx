@@ -198,7 +198,7 @@ function NewAnalysis({ hideNavbar = false }: { hideNavbar?: boolean }) {
 
               <div className="upload-grid">
                 {([
-                  { key: 'balanceSheet', label: 'Balance Sheet', sub: '3 years financial statements', Icon: CloudUpload },
+                  { key: 'balanceSheet', label: 'Balance Sheet', sub: 'last 12 months', Icon: CloudUpload },
                   { key: 'bankStatements', label: 'Bank Statements', sub: 'Last 12 months', Icon: FileUp },
                   { key: 'gstFilings', label: 'GST Filings', sub: 'Last 12 months', Icon: FileText },
                 ] as const).map(({ key, label, sub, Icon }) => {

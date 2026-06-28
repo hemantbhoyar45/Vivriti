@@ -129,39 +129,58 @@ def generate_cam(analysis_data: dict, field_observations: str = "") -> dict:
 
     dynamic_conditions = []
 
-    if fraud_level == "HIGH":
-        gst_sig = next((s for s in fraud_signals if "GST" in s.get("signal_type","")), {})
-        gst_amount = gst_sig.get("evidence_amount", 0) or 0
-        dynamic_conditions.append(
-            f"Enhanced Due Diligence Required: Submit Big-4 audited financials for last 3 years. "
-            f"Resolve GST ITC mismatch of ₹{gst_amount/1e5:.1f} Lakhs before disbursement."
-        )
-
-    if pd_val > 25:
-        coverage_gap = round(loan_req * 0.5 / 1e5, 1)
-        dynamic_conditions.append(
-            f"Additional Collateral Required: Collateral coverage ratio minimum 1.5x of loan amount. "
-            f"Current gap estimated at ₹{coverage_gap:.1f} Lakhs based on PD of {pd_val:.1f}%."
-        )
-
-    if data_quality < 70:
-        dynamic_conditions.append(
-            f"Document Resubmission: Current OCR confidence score is {data_quality:.1f}%. "
-            f"CA-certified financial statements with seal required within 15 days of sanction."
-        )
-
-    if news_score > 60:
-        dynamic_conditions.append(
-            f"Quarterly Financial Reporting Covenant: News risk score of {news_score:.1f}/100 indicates "
-            f"elevated public risk signals. Submit management accounts every quarter. "
-            f"Trigger review if revenue drops >15% from projected."
-        )
-
-    if not dynamic_conditions:
+    if decision_val == "APPROVE":
         dynamic_conditions.append(
             "Standard Monitoring: Account classified as low-risk. Quarterly statement submission sufficient. "
             f"Current PD of {pd_val:.1f}% is within acceptable range."
         )
+    elif decision_val == "REJECT":
+        reasons = []
+        if fraud_level == "HIGH":
+            reasons.append("High fraud risk detected")
+        if pd_val > 25:
+            reasons.append(f"High probability of default ({pd_val:.1f}%)")
+        if news_score > 60:
+            reasons.append("Elevated public risk signals")
+        
+        reason_str = ", ".join(reasons) if reasons else "High risk profile"
+        dynamic_conditions.append(
+            f"Application Rejected. Key reasons: {reason_str}. "
+            f"The current risk metrics exceed the acceptable threshold for sanction."
+        )
+    else: # CONDITIONAL
+        if fraud_level == "HIGH":
+            gst_sig = next((s for s in fraud_signals if "GST" in s.get("signal_type","")), {})
+            gst_amount = gst_sig.get("evidence_amount", 0) or 0
+            dynamic_conditions.append(
+                f"Enhanced Due Diligence Required: Submit Big-4 audited financials for last 3 years. "
+                f"Resolve GST ITC mismatch of ₹{gst_amount/1e5:.1f} Lakhs before disbursement."
+            )
+
+        if pd_val > 25:
+            coverage_gap = round(loan_req * 0.5 / 1e5, 1)
+            dynamic_conditions.append(
+                f"Additional Collateral Required: Collateral coverage ratio minimum 1.5x of loan amount. "
+                f"Current gap estimated at ₹{coverage_gap:.1f} Lakhs based on PD of {pd_val:.1f}%."
+            )
+
+        if data_quality < 70:
+            dynamic_conditions.append(
+                f"Document Resubmission: Current OCR confidence score is {data_quality:.1f}%. "
+                f"CA-certified financial statements with seal required within 15 days of sanction."
+            )
+
+        if news_score > 60:
+            dynamic_conditions.append(
+                f"Quarterly Financial Reporting Covenant: News risk score of {news_score:.1f}/100 indicates "
+                f"elevated public risk signals. Submit management accounts every quarter. "
+                f"Trigger review if revenue drops >15% from projected."
+            )
+
+        if not dynamic_conditions:
+            dynamic_conditions.append(
+                "Conditional Approval: Require further manual verification of financial statements."
+            )
 
     conditions_text = "\n".join(f"{i+1}. {c}" for i, c in enumerate(dynamic_conditions))
 

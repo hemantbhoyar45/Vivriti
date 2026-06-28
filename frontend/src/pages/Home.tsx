@@ -239,20 +239,20 @@ function Home() {
             >
               {[
                 {
-                  name: 'Starter', price: '₹49,999', period: '/month',
-                  desc: 'For NBFCs and MFIs beginning their AI credit journey.',
+                  name: 'Starter', price: '₹19,999', period: '/month',
+                  desc: 'Ideal for NBFCs and MFIs embarking on their AI credit journey.',
                   features: ['50 analyses / month', 'Document OCR Engine', 'Basic Fraud Detection', 'SHAP Risk Score', 'Email Support'],
                   cta: 'Get Started', highlight: false,
                 },
                 {
-                  name: 'Professional', price: '₹1,49,999', period: '/month',
-                  desc: 'For mid-sized banks and lending institutions.',
+                  name: 'Professional', price: '₹89,999', period: '/month',
+                  desc: 'Comprehensive solution for mid-sized banks and lending institutions.',
                   features: ['250 analyses / month', 'Full Fraud Suite (GST + MCA + Circular)', 'News Intelligence Agent', 'AI CAM Generation', 'Early Warning System', 'Priority Support'],
                   cta: 'Start Free Trial', highlight: true,
                 },
                 {
                   name: 'Enterprise', price: 'Custom', period: '',
-                  desc: 'For large banks and financial conglomerates.',
+                  desc: 'Scalable infrastructure for large banks and financial conglomerates.',
                   features: ['Unlimited analyses', 'On-premise deployment', 'Custom model training', 'API integration', 'Dedicated SLA', 'White-label option'],
                   cta: 'Contact Sales', highlight: false,
                 },
@@ -282,7 +282,7 @@ function Home() {
                   <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
                     <Link
                       to="/login"
-                      className={`karta-btn karta-pricing-card__cta ${highlight ? 'karta-btn--primary' : 'karta-btn--outline'}`}
+                      className={`karta-btn karta-pricing-card__cta karta-btn--primary`}
                     >
                       {cta}
                     </Link>

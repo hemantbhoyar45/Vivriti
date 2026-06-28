@@ -194,7 +194,7 @@ python start_backend.py
 
 **Terminal 2 - Frontend:**
 ```bash
-bash start_frontend.sh
+bash start_frontend..ps1
 ```
 
 ---
